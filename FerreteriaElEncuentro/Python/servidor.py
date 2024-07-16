@@ -60,21 +60,6 @@ def proveedores():
 def sucursales():
     return render_template("Sucursales.html")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @app.route('/css/<path:path>')
 def send_css(path):
     return send_from_directory('D:/Universidad/V Cuatrimestre/Lenguajes De Base De Datos/Proyecto/Lenguaje-de-BD/FerreteriaElEncuentro/CSS', path)
