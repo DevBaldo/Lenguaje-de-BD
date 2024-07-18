@@ -2,7 +2,7 @@ from flask import Flask, render_template, send_from_directory
 
 app = Flask(
     __name__,
-    template_folder='D:/Universidad/V Cuatrimestre/Lenguajes De Base De Datos/Proyecto/Lenguaje-de-BD/FerreteriaElEncuentro/HTML',
+    template_folder= r'C:\Users\Morgan\Documents\Lenguaje-de-BD\FerreteriaElEncuentro\HTML',
     static_folder=None
 )
 
@@ -62,15 +62,15 @@ def sucursales():
 
 @app.route('/css/<path:path>')
 def send_css(path):
-    return send_from_directory('D:/Universidad/V Cuatrimestre/Lenguajes De Base De Datos/Proyecto/Lenguaje-de-BD/FerreteriaElEncuentro/CSS', path)
+    return send_from_directory(r'C:\Users\Morgan\Documents\Lenguaje-de-BD\FerreteriaElEncuentro\CSS', path)
 
 @app.route('/js/<path:path>')
 def send_js(path):
-    return send_from_directory('D:/Universidad/V Cuatrimestre/Lenguajes De Base De Datos/Proyecto/Lenguaje-de-BD/FerreteriaElEncuentro/JS', path)
+    return send_from_directory(r'C:\Users\Morgan\Documents\Lenguaje-de-BD\FerreteriaElEncuentro\JS', path)
 
 @app.route('/recursos/img/<path:path>')
 def send_img(path):
-    return send_from_directory('D:/Universidad/V Cuatrimestre/Lenguajes De Base De Datos/Proyecto/Lenguaje-de-BD/FerreteriaElEncuentro/Recursos/img', path)
+    return send_from_directory(r'C:\Users\Morgan\Documents\Lenguaje-de-BD\FerreteriaElEncuentro\Recursos\img', path)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)
