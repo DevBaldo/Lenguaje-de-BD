@@ -3,11 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Clientes</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Clientes - El Encuentro</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+    <body>
+        <div class="icon">
+            <a href="/" class="icon-text"><img src="/recursos/img/logo.png" alt="icono" class="iconimg"> <h1>El Encuentro</h1> </a>
+        </div>
+    
+        <div>
+            <nav class="navbar">
+                <a href="/Proveedores"> <h4>Proveedores </h4></a>
+                <a href="/Productos"> <h4>Productos </h4></a>
+                <a href="/Sucursales"> <h4>Sucursales </h4></a>
+                <a href="/Departamentos"> <h4>Departamentos </h4></a>
+                <a href="/Empleados"> <h4>Empleados </h4></a>
+                <a href="/Clientes"> <h4>Clientes </h4></a>
+                <a href="/Inventario"> <h4>Inventario </h4></a>
+                <a href="/Facturacion"> <h4>Facturacion </h4></a>
+                <a href="/Pagos"> <h4>Pagos </h4></a>
+                <a href="/Envios"> <h4>Envios </h4></a>
+            </nav>
+        </div>
+    
+        <div class="banner-container">
+            <img src="/recursos/img/Banner.jpeg" alt="icono" class="banner"> 
+        </div>
+
+    <div class="banner-container">
+        <img src="/recursos/img/Banner.jpeg" alt="Banner" class="banner img-fluid">
+    </div>
+
     <div class="container">
         <h1>Gestión de Clientes</h1>
         <div class="row">
@@ -81,8 +109,29 @@
             </div>
         </div>
     </div>
+    <footer class="bg-dark text-white mt-5 p-4 text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h3>Nosotros</h3>
+                    <p class="nosotros">
+                        Ubicados en el corazón de Costa Rica, en El Encuentro nos dedicamos a ofrecer productos de calidad para todas tus necesidades de construcción y remodelación. Nuestra empresa fue fundada con el objetivo de aplicar los conocimientos adquiridos en lenguajes de bases de datos, asegurando un manejo eficiente y moderno de nuestro inventario y servicios. Nos enorgullecemos de brindar atención personalizada y soluciones innovadoras para nuestros clientes. ¡Visítanos y encuentra todo lo que necesitas para tus proyectos!
+                    </p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h3>Síguenos en</h3>
+                    <img src="/recursos/img/redessociales.png" alt="Redes Sociales" width="220" height="220" class="redes">
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h3>Servicio Al Cliente</h3>
+                    <h2 class="serviciocliente">+506 22244-556</h2>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
