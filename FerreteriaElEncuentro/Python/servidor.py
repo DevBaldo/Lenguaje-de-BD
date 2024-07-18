@@ -1,19 +1,90 @@
-from flask import Flask, render_template, send_from_directory
+from flask import Flask, render_template, send_from_directory, request, redirect, url_for
+import cx_Oracle
 
 app = Flask(
     __name__,
-    template_folder= r'C:\Users\Morgan\Documents\Lenguaje-de-BD\FerreteriaElEncuentro\HTML',
+    template_folder=r'C:\Users\Morgan\Documents\Lenguaje-de-BD\FerreteriaElEncuentro\HTML',
     static_folder=None
 )
 
+# Configuración de la base de datos Oracle
+class Config:
+    ORACLE_USER = 'proyecto'
+    ORACLE_PASSWORD = '123'
+    ORACLE_DSN = 'localhost'
+
+def get_db_connection():
+    connection = cx_Oracle.connect(
+        user=Config.ORACLE_USER,
+        password=Config.ORACLE_PASSWORD,
+        dsn=Config.ORACLE_DSN
+    )
+    return connection
+
+# CRUD para Clientes
 @app.route("/")
 def index():
     return render_template("index.html")
 
-@app.route("/clientes", methods=['GET'])
-@app.route("/Clientes", methods=['GET'])
+@app.route("/clientes", methods=['GET', 'POST'])
+@app.route("/Clientes", methods=['GET', 'POST'])
 def clientes():
-    return render_template("Clientes.html")
+    if request.method == 'POST':
+        codigo = request.form['codigo']
+        nombre = request.form['nombre']
+        apellido = request.form['apellido']
+        telefono = request.form['telefono']
+        correo = request.form['correo']
+
+        connection = get_db_connection()
+        cursor = connection.cursor()
+        cursor.execute(
+            "INSERT INTO CLIENTES (CODIGO, NOMBRE, APELLIDO, TELEFONO, CORREO) VALUES (:1, :2, :3, :4, :5)",
+            (codigo, nombre, apellido, telefono, correo)
+        )
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return redirect(url_for('clientes'))
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM CLIENTES")
+    clientes = cursor.fetchall()
+    cursor.close()
+    connection.close()
+
+    return render_template("Clientes.html", clientes=clientes)
+
+@app.route("/clientes/edit/<codigo>", methods=['POST'])
+def edit_cliente(codigo):
+    nombre = request.form['nombre']
+    apellido = request.form['apellido']
+    telefono = request.form['telefono']
+    correo = request.form['correo']
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute(
+        "UPDATE CLIENTES SET NOMBRE = :1, APELLIDO = :2, TELEFONO = :3, CORREO = :4 WHERE CODIGO = :5",
+        (nombre, apellido, telefono, correo, codigo)
+    )
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+    return redirect(url_for('clientes'))
+
+@app.route("/clientes/delete/<codigo>", methods=['POST'])
+def delete_cliente(codigo):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute("DELETE FROM CLIENTES WHERE CODIGO = :1", (codigo,))
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+    return redirect(url_for('clientes'))
 
 @app.route("/departamentos", methods=['GET'])
 @app.route("/Departamentos", methods=['GET'])
