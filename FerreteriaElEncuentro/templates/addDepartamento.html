@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %} Agregar Departamento {% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <button class="btn btn-primary mb-3"><a href="{{ url_for('departamentos') }}" style="color: white; text-decoration: none;">Volver</a></button>
+
+    <h1>Agregar Departamento</h1>
+    <form method="post">
+        <div class="form-group">
+            <label for="nombre">Nombre del Departamento</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" required>
+        </div>
+        <div class="form-group">
+            <label for="descripcion">Descripción del Departamento</label>
+            <input type="text" class="form-control" id="descripcion" name="descripcion" required>
+        </div>
+        <button type="submit" class="btn btn-success">Agregar</button>
+    </form>
+</div>
+{% endblock %}
