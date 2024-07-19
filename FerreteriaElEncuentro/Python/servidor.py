@@ -1,8 +1,8 @@
-from flask import Flask, render_template, send_from_directory
+from flask import Flask, redirect, render_template, request, send_from_directory, url_for
 
 app = Flask(
     __name__,
-    template_folder='D:/Universidad/V Cuatrimestre/Lenguajes De Base De Datos/Proyecto/Lenguaje-de-BD/FerreteriaElEncuentro/HTML',
+    template_folder='C:/Users/jmarin/LenguajeBaseDatosProyecto/Lenguaje-de-BD/FerreteriaElEncuentro/HTML',
     static_folder=None
 )
 
@@ -23,6 +23,16 @@ def departamentos():
 @app.route("/empleados", methods=['GET'])
 @app.route("/Empleados", methods=['GET'])
 def empleados():
+    if request.method == 'POST':
+        cod_empleado = request.form['cod_empleado']
+        nombre = request.form['nombre']
+        primer_apellido = request.form['primer_apellido']
+        segundo_apellido = request.form['segundo_apellido']
+        correo = request.form['correo']
+        numero = request.form['numero']
+        departamento = request.form['departamento']
+        print(f"Registro de empleado: {cod_empleado}, {nombre}, {primer_apellido}, {segundo_apellido}, {correo}, {numero}, {departamento}")
+        return redirect(url_for('empleados'))
     return render_template("Empleados.html")
 
 @app.route("/envios", methods=['GET'])
@@ -53,6 +63,12 @@ def productos():
 @app.route("/proveedores", methods=['GET'])
 @app.route("/Proveedores", methods=['GET'])
 def proveedores():
+    if request.method == 'POST':
+        cod_proveedor = request.form['cod_proveedor']
+        nombre_proveedor = request.form['nombre_proveedor']
+        producto_ventas = request.form['producto_ventas']
+        print(f"Registrado proveedor: {cod_proveedor}, {nombre_proveedor}, {producto_ventas}")
+        return redirect(url_for('proveedores'))
     return render_template("Proveedores.html")
 
 @app.route("/sucursales", methods=['GET'])
@@ -62,15 +78,15 @@ def sucursales():
 
 @app.route('/css/<path:path>')
 def send_css(path):
-    return send_from_directory('D:/Universidad/V Cuatrimestre/Lenguajes De Base De Datos/Proyecto/Lenguaje-de-BD/FerreteriaElEncuentro/CSS', path)
+    return send_from_directory('C:/Users/jmarin/LenguajeBaseDatosProyecto/Lenguaje-de-BD/FerreteriaElEncuentro/CSS', path)
 
 @app.route('/js/<path:path>')
 def send_js(path):
-    return send_from_directory('D:/Universidad/V Cuatrimestre/Lenguajes De Base De Datos/Proyecto/Lenguaje-de-BD/FerreteriaElEncuentro/JS', path)
+    return send_from_directory('C:/Users/jmarin/LenguajeBaseDatosProyecto/Lenguaje-de-BD/FerreteriaElEncuentro/JS', path)
 
 @app.route('/recursos/img/<path:path>')
 def send_img(path):
-    return send_from_directory('D:/Universidad/V Cuatrimestre/Lenguajes De Base De Datos/Proyecto/Lenguaje-de-BD/FerreteriaElEncuentro/Recursos/img', path)
+    return send_from_directory('C:/Users/jmarin/LenguajeBaseDatosProyecto/Lenguaje-de-BD/FerreteriaElEncuentro/Recursos/img', path)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)
