@@ -86,6 +86,67 @@ def delete_cliente(codigo):
 
     return redirect(url_for('clientes'))
 
+# CRUD para Envios
+@app.route("/envios", methods=['GET', 'POST'])
+@app.route("/Envios", methods=['GET', 'POST'])
+def envios():
+    if request.method == 'POST':
+        codigo_envio = request.form['codigoEnvio']
+        cliente = request.form['cliente']
+        direccion = request.form['direccion']
+        fecha_envio = request.form['fechaEnvio']
+        estado = request.form['estado']
+
+        connection = get_db_connection()
+        cursor = connection.cursor()
+        cursor.execute(
+            "INSERT INTO ENVIOS (CODIGO_ENVIO, CLIENTE, DIRECCION, FECHA_ENVIO, ESTADO) VALUES (:1, :2, :3, :4, :5)",
+            (codigo_envio, cliente, direccion, fecha_envio, estado)
+        )
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return redirect(url_for('envios'))
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM ENVIOS")
+    envios = cursor.fetchall()
+    cursor.close()
+    connection.close()
+
+    return render_template("Envios.html", envios=envios)
+
+@app.route("/envios/edit/<codigo_envio>", methods=['POST'])
+def edit_envio(codigo_envio):
+    cliente = request.form['cliente']
+    direccion = request.form['direccion']
+    fecha_envio = request.form['fechaEnvio']
+    estado = request.form['estado']
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute(
+        "UPDATE ENVIOS SET CLIENTE = :1, DIRECCION = :2, FECHA_ENVIO = :3, ESTADO = :4 WHERE CODIGO_ENVIO = :5",
+        (cliente, direccion, fecha_envio, estado, codigo_envio)
+    )
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+    return redirect(url_for('envios'))
+
+@app.route("/envios/delete/<codigo_envio>", methods=['POST'])
+def delete_envio(codigo_envio):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute("DELETE FROM ENVIOS WHERE CODIGO_ENVIO = :1", (codigo_envio,))
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+    return redirect(url_for('envios'))
+
 @app.route("/departamentos", methods=['GET'])
 @app.route("/Departamentos", methods=['GET'])
 def departamentos():
@@ -95,11 +156,6 @@ def departamentos():
 @app.route("/Empleados", methods=['GET'])
 def empleados():
     return render_template("Empleados.html")
-
-@app.route("/envios", methods=['GET'])
-@app.route("/Envios", methods=['GET'])
-def envios():
-    return render_template("Envios.html")
 
 @app.route("/facturacion", methods=['GET'])
 @app.route("/Facturacion", methods=['GET'])
