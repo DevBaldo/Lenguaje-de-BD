@@ -1,5 +1,6 @@
 from flask import Flask, render_template, send_from_directory, request, redirect, url_for
 import cx_Oracle
+from datetime import datetime
 
 app = Flask(
     __name__,
@@ -11,7 +12,7 @@ app = Flask(
 class Config:
     ORACLE_USER = 'proyecto'
     ORACLE_PASSWORD = '123'
-    ORACLE_DSN = 'localhost'
+    ORACLE_DSN ='localhost:1521/ORCL'
 
 def get_db_connection():
     connection = cx_Oracle.connect(
@@ -94,9 +95,10 @@ def envios():
         codigo_envio = request.form['codigoEnvio']
         cliente = request.form['cliente']
         direccion = request.form['direccion']
-        fecha_envio = request.form['fechaEnvio']
+        fecha_envio_str = request.form['fechaEnvio']
         estado = request.form['estado']
 
+        fecha_envio = datetime.strptime(fecha_envio_str, '%Y-%m-%d').date()
         connection = get_db_connection()
         cursor = connection.cursor()
         cursor.execute(
@@ -121,9 +123,10 @@ def envios():
 def edit_envio(codigo_envio):
     cliente = request.form['cliente']
     direccion = request.form['direccion']
-    fecha_envio = request.form['fechaEnvio']
+    fecha_envio_str = request.form['fechaEnvio']
     estado = request.form['estado']
 
+    fecha_envio = datetime.strptime(fecha_envio_str, '%Y-%m-%d').date()
     connection = get_db_connection()
     cursor = connection.cursor()
     cursor.execute(
