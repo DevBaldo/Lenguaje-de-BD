@@ -64,3 +64,49 @@ main .banner {
     width: 100%;
     display: block;
 }
+
+footer {
+    color: white;
+    padding: 20px 0; 
+    text-align: center;
+    background-color: #595959;
+}
+
+.footer-columns {
+    display: flex;
+    justify-content: space-between; 
+    padding: 0 20px;
+    position: relative;
+}
+
+.footer-columns::before,
+.footer-columns::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    width: 1px;
+    background-color: white;
+}
+
+.footer-columns::before {
+    left: calc(33.33% - 1px);
+}
+
+.footer-columns::after {
+    right: calc(33.33% - 1px);
+}
+
+.footer-columns div {
+    flex: 1;
+    padding: 0 10px;
+}
+
+.serviciocliente {
+    margin-top: 70px;
+}
+
+.nosotros{
+    margin-right: 22px;
+    margin-top: 30px;
+}

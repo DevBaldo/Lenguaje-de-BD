@@ -1,69 +1,31 @@
-<!DOCTYPE html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home</title>
-<link rel="stylesheet" href="/css/style.css">
-
-</head>
-<body>
-    <div class="icon">
-        <a href="/" class="icon-text"><img src="/recursos/img/logo.png" alt="icono" class="iconimg"> <h1>El Encuentro</h1> </a>
-    </div>
-
-    <div>
-        <nav class="navbar">
-            <a href="/Proveedores"> <h4>Proveedores </h4></a>
-            <a href="/Productos"> <h4>Productos </h4></a>
-            <a href="/Sucursales"> <h4>Sucursales </h4></a>
-            <a href="/Departamentos"> <h4>Departamentos </h4></a>
-            <a href="/Empleados"> <h4>Empleados </h4></a>
-            <a href="/Clientes"> <h4>Clientes </h4></a>
-            <a href="/Inventario"> <h4>Inventario </h4></a>
-            <a href="/Facturacion"> <h4>Facturacion </h4></a>
-            <a href="/Pagos"> <h4>Pagos </h4></a>
-            <a href="/Envios"> <h4>Envios </h4></a>
-        </nav>
-    </div>
-
-    <div class="banner-container">
-        <img src="/recursos/img/Banner.jpeg" alt="icono" class="banner"> 
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-<footer>
-    <div class="footer-columns">
-        <div> <h3>Nosotros</h3>
-<p class="nosotros">
-    Ubicados en el corazón de Costa Rica, en El Encuentro nos dedicamos a ofrecer productos de calidad para todas tus necesidades de construcción y remodelación. Nuestra empresa fue fundada con el objetivo de aplicar los conocimientos adquiridos en lenguajes de bases de datos, asegurando un manejo eficiente y moderno de nuestro inventario y servicios. 
-    Nos enorgullecemos de brindar atención personalizada y soluciones innovadoras para nuestros clientes. ¡Visítanos y encuentra todo lo que necesitas para tus proyectos!   
-</p>
+{% extends "base.html" %} {% block title %} Home Page {% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Departamentos</h1>
+    </div><button class="btn btn-success"><a href="/addDepartamento" class="text-white text-decoration-none">+ Agregar</a></button> <br><br>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Codigo del Departamento</th>
+            <th>Nombre del Departamento</th>
+            <th>Descripción del Departamento</th>
+            <th>Acción</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for departamento in departamentos %}
+        <tr>
+            <td>{{ departamento[0] }}</td>
+            <td>{{ departamento[1] }}</td>
+            <td>{{ departamento[2] }}</td>
+            <td class="d-flex align-items-center">
+                <button class="btn btn-warning btn-sm me-2"><a href="{{ url_for('update_departamento', codigo=departamento[0]) }}" class="text-white text-decoration-none">Actualizar</a></button>
+                <button class="btn btn-danger btn-sm"><a href="{{ url_for('eliminar_departamento', codigo=departamento[0]) }}" class="text-white text-decoration-none">Eliminar</a></button>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 </div>
-
-<div><h3>Siguenos en</h3>
-    <img src="/recursos/img/redessociales.png" alt="productoimg" width="220" height="220" class="redes">
-</div>
-
-
-<div> <h3>Servicio Al Cliente</h3>
-<h2 class="serviciocliente">+506 22244-556</h2>
-</div>
-        
-    </div>
-</footer>
-
-</body>
-</html>
+{% endblock %}
