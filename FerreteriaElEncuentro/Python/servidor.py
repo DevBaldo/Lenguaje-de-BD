@@ -31,7 +31,7 @@ def empleados():
         correo = request.form['correo']
         numero = request.form['numero']
         departamento = request.form['departamento']
-        print(f"Registro de empleado: {cod_empleado}, {nombre}, {primer_apellido}, {segundo_apellido}, {correo}, {numero}, {departamento}")
+        print(f"Empleado registrado: {cod_empleado}, {nombre}, {primer_apellido}, {segundo_apellido}, {correo}, {numero}, {departamento}")
         return redirect(url_for('empleados'))
     return render_template("Empleados.html")
 
@@ -67,7 +67,7 @@ def proveedores():
         cod_proveedor = request.form['cod_proveedor']
         nombre_proveedor = request.form['nombre_proveedor']
         producto_ventas = request.form['producto_ventas']
-        print(f"Registrado proveedor: {cod_proveedor}, {nombre_proveedor}, {producto_ventas}")
+        print(f"Proveedor registrado: {cod_proveedor}, {nombre_proveedor}, {producto_ventas}")
         return redirect(url_for('proveedores'))
     return render_template("Proveedores.html")
 
