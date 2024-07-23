@@ -2,68 +2,194 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home</title>
+<title>Clientes</title>
 <link rel="stylesheet" href="/css/style.css">
-
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="icon">
-        <a href="/" class="icon-text"><img src="/recursos/img/logo.png" alt="icono" class="iconimg"> <h1>El Encuentro</h1> </a>
+        <a href="/" class="icon-text"><img src="/recursos/img/logo.png" alt="icono" class="iconimg"> <h2>El Encuentro</h2> </a>
     </div>
 
     <div>
         <nav class="navbar">
-            <a href="/Proveedores"> <h4>Proveedores </h4></a>
-            <a href="/Productos"> <h4>Productos </h4></a>
-            <a href="/Sucursales"> <h4>Sucursales </h4></a>
-            <a href="/Departamentos"> <h4>Departamentos </h4></a>
-            <a href="/Empleados"> <h4>Empleados </h4></a>
-            <a href="/Clientes"> <h4>Clientes </h4></a>
-            <a href="/Inventario"> <h4>Inventario </h4></a>
-            <a href="/Facturacion"> <h4>Facturacion </h4></a>
-            <a href="/Pagos"> <h4>Pagos </h4></a>
-            <a href="/Envios"> <h4>Envios </h4></a>
+            <a href="/Proveedores"> <h6>Proveedores </h6></a>
+            <a href="/Productos"> <h6>Productos </h6></a>
+            <a href="/Sucursales"> <h6>Sucursales </h6></a>
+            <a href="/Departamentos"> <h6>Departamentos </h6></a>
+            <a href="/Empleados"> <h6>Empleados </h6></a>
+            <a href="/Clientes"> <h6>Clientes </h6></a>
+            <a href="/Inventario"> <h6>Inventario </h6></a>
+            <a href="/Facturacion"> <h6>Facturacion </h6></a>
+            <a href="/Pagos"> <h6>Pagos </h6></a>
+            <a href="/Envios"> <h6>Envios </h6></a>
         </nav>
     </div>
+<div class="banner-container">
+    <img src="/recursos/img/Banner.jpeg" alt="icono" class="banner">
+</div>
 
-    <div class="banner-container">
-        <img src="/recursos/img/Banner.jpeg" alt="icono" class="banner"> 
+<div class="container">
+    <h1>Gestión de Clientes</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    Registrar Nuevo Cliente
+                </div>
+                <div class="card-body">
+                    <form action="/clientes" method="post">
+                        <div class="form-group">
+                            <label for="codigo">Código de Cliente:</label>
+                            <input type="text" class="form-control" id="codigo" name="codigo">
+                        </div>
+                        <div class="form-group">
+                            <label for="nombre">Nombre:</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre">
+                        </div>
+                        <div class="form-group">
+                            <label for="apellido">Apellido:</label>
+                            <input type="text" class="form-control" id="apellido" name="apellido">
+                        </div>
+                        <div class="form-group">
+                            <label for="telefono">Número de Contacto:</label>
+                            <input type="text" class="form-control" id="telefono" name="telefono">
+                        </div>
+                        <div class="form-group">
+                            <label for="correo">Correo Electrónico:</label>
+                            <input type="email" class="form-control" id="correo" name="correo">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Registrar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    Lista de Clientes
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th>Teléfono</th>
+                                <th>Correo</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cliente in clientes %}
+                            <tr>
+                                <td>{{ cliente[0] }}</td>
+                                <td>{{ cliente[1] }}</td>
+                                <td>{{ cliente[2] }}</td>
+                                <td>{{ cliente[3] }}</td>
+                                <td>{{ cliente[4] }}</td>
+                                <td>
+                                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editClienteModal{{ cliente[0] }}">Editar</button>
+                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteClienteModal{{ cliente[0] }}">Eliminar</button>
+                                </td>
+                            </tr>
+
+                            <!-- Modal Editar Cliente -->
+                            <div class="modal fade" id="editClienteModal{{ cliente[0] }}" tabindex="-1" aria-labelledby="editClienteModalLabel{{ cliente[0] }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editClienteModalLabel{{ cliente[0] }}">Editar Cliente</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="/clientes/edit/{{ cliente[0] }}" method="post">
+                                                <div class="form-group">
+                                                    <label for="nombre">Nombre:</label>
+                                                    <input type="text" class="form-control" id="nombre" name="nombre" value="{{ cliente[1] }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="apellido">Apellido:</label>
+                                                    <input type="text" class="form-control" id="apellido" name="apellido" value="{{ cliente[2] }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="telefono">Número de Contacto:</label>
+                                                    <input type="text" class="form-control" id="telefono" name="telefono" value="{{ cliente[3] }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="correo">Correo Electrónico:</label>
+                                                    <input type="email" class="form-control" id="correo" name="correo" value="{{ cliente[4] }}">
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal Eliminar Cliente -->
+                            <div class="modal fade" id="deleteClienteModal{{ cliente[0] }}" tabindex="-1" aria-labelledby="deleteClienteModalLabel{{ cliente[0] }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteClienteModalLabel{{ cliente[0] }}">Eliminar Cliente</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>¿Estás seguro de que deseas eliminar a {{ cliente[1] }} {{ cliente[2] }}?</p>
+                                            <form action="/clientes/delete/{{ cliente[0] }}" method="post">
+                                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-    
+<!-- Footer -->    
 <footer>
     <div class="footer-columns">
-        <div> <h3>Nosotros</h3>
-<p class="nosotros">
-    Ubicados en el corazón de Costa Rica, en El Encuentro nos dedicamos a ofrecer productos de calidad para todas tus necesidades de construcción y remodelación. Nuestra empresa fue fundada con el objetivo de aplicar los conocimientos adquiridos en lenguajes de bases de datos, asegurando un manejo eficiente y moderno de nuestro inventario y servicios. 
-    Nos enorgullecemos de brindar atención personalizada y soluciones innovadoras para nuestros clientes. ¡Visítanos y encuentra todo lo que necesitas para tus proyectos!   
-</p>
-</div>
+        <div>
+            <h5>Nosotros</h5>
+            <p class="nosotros">
+                Ubicados en el corazón de Costa Rica, en El Encuentro nos dedicamos a ofrecer productos de calidad para
+                todas tus necesidades de construcción y remodelación. Nuestro proyecto fue creado con el objetivo de
+                aplicar los conocimientos adquiridos en lenguajes de bases de datos, asegurando un manejo eficiente y
+                moderno de nuestro inventario y servicios.
+                Nos enorgullecemos de brindar atención personalizada y soluciones innovadoras para nuestros clientes.
+                ¡Visítanos y encuentra todo lo que necesitas para tus proyectos!
+            </p>
+        </div>
 
-<div><h3>Siguenos en</h3>
-    <img src="/recursos/img/redessociales.png" alt="productoimg" width="220" height="220" class="redes">
-</div>
+        <div>
+            <h5>Siguenos en</h5>
+            <img src="/recursos/img/redessociales.png" alt="productoimg" width="190" height="190" class="redes">
+        </div>
 
 
-<div> <h3>Servicio Al Cliente</h3>
-<h2 class="serviciocliente">+506 22244-556</h2>
-</div>
-        
+        <div>
+            <h5>Servicio Al Cliente</h5>
+            <h3 class="serviciocliente">+506 22244-556</h3>
+        </div>
+
     </div>
 </footer>
-
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 </body>
 </html>

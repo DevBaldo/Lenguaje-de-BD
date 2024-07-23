@@ -32,14 +32,42 @@
 
 
 
+    <div class="container">
+        <div style="color: rgb(252, 252, 252);"> <h2>Registro de Proveedores</h2> </div>
+        <form action="/proveedores" method="post" class="mb-4">
+            <div class="mb-3">
+                <label for="cod_proveedor" class="form-label">Código de Proveedor:</label>
+                <input type="text" id="cod_proveedor" name="cod_proveedor" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="nombre_proveedor" class="form-label">Nombre del Proveedor:</label>
+                <input type="text" id="nombre_proveedor" name="nombre_proveedor" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="producto_ventas" class="form-label">Producto Ventas:</label>
+                <input type="text" id="producto_ventas" name="producto_ventas" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Registrar</button>
+        </form>
 
+        <div style="color: rgb(252, 252, 252);"> <h2>Editar Proveedor</h2> </div>
+        <form action="/proveedores/editar" method="post" class="mb-4">
+            <div class="mb-3">
+                <label for="cod_proveedor_edit" class="form-label">Código de Proveedor:</label>
+                <input type="text" id="cod_proveedor_edit" name="cod_proveedor_edit" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-secondary">Editar</button>
+        </form>
 
-
-
-
-
-
-
+        <div style="color: rgb(252, 252, 252);"> <h2>Eliminar Empleado</h2> </div>
+        <form action="/proveedores/eliminar" method="post" class="mb-4">
+            <div class="mb-3">
+                <label for="cod_proveedor_del" class="form-label">Código de Proveedor:</label>
+                <input type="text" id="cod_proveedor_del" name="cod_proveedor_del" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+        </form>
+    </div>
 
 
 
