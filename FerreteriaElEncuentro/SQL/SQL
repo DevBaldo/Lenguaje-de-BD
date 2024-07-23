@@ -63,6 +63,15 @@ CREATE TABLE Inventarios (
     FechaIngreso DATE,
     FOREIGN KEY (cod_sucursal) REFERENCES Sucursal(cod_sucursal)
 );
+select * from Invetarios
+
+--INSERT INTO inventario (nombre, codigo, cantidad, precio) VALUES ('CH001', 001, 15, 7-22-2024);
+--INSERT INTO inventario (nombre, codigo, cantidad, precio) VALUES ('S002', 002, 10, 7-22-2024);
+--INSERT INTO inventario (nombre, codigo, cantidad, precio) VALUES ('EA003', 001, 5, 7-15-2024);
+--INSERT INTO inventario (nombre, codigo, cantidad, precio) VALUES ('M004', 003, 50, 7-10-2024);
+--INSERT INTO inventario (nombre, codigo, cantidad, precio) VALUES ('T005', 001, 8, 7-15-2024);
+--INSERT INTO inventario (nombre, codigo, cantidad, precio) VALUES ('AM006', 002, 5, 7-10-2024);
+
 
 -- Table: Productos
 CREATE TABLE Productos (
@@ -612,6 +621,51 @@ JOIN
 JOIN 
     Clientes C ON EC.cod_cliente = C.cod_cliente;
 
+
+----Inventarios----
+--Procedimiento para insertar inventario
+CREATE OR REPLACE PROCEDURE Insertar_Inventario (
+    p_cod_inventario IN Inventarios.cod_inventario%TYPE, --id de inv
+    p_cod_sucursal IN Inventarios.cod_sucursal%TYPE, --id sucursal
+    p_Cantidad IN Inventarios.Cantidad%TYPE, --cant prod
+    p_FechaIngreso IN Inventarios.FechaIngreso%TYPE
+) AS
+BEGIN
+    INSERT INTO Inventarios (
+        cod_inventario, 
+        cod_sucursal, 
+        Cantidad, 
+        FechaIngreso
+    ) VALUES (
+        p_cod_inventario, 
+        p_cod_sucursal, 
+        p_Cantidad, 
+        p_FechaIngreso
+    );
+END Insertar_Inventario;
+/
+
+    
+--vista inventario
+CREATE OR REPLACE VIEW Vista_Inventarios AS
+SELECT 
+    I.cod_inventario,
+    I.Cantidad,
+    I.FechaIngreso,
+    P.cod_producto,
+    P.nombre AS Producto_Nombre,
+    P.imagen AS Producto_Imagen,
+    P.precio AS Producto_Precio,
+    S.cod_sucursal,
+    S.Correo AS Sucursal_Correo,
+    S.Direccion AS Sucursal_Direccion,
+    S.Telefono AS Sucursal_Telefono
+FROM 
+    Inventarios I
+JOIN 
+    Sucursal S ON I.cod_sucursal = S.cod_sucursal
+LEFT JOIN 
+    Productos P ON I.cod_inventario = P.cod_inventario;
 
 
 

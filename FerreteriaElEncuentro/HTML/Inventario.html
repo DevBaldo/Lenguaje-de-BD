@@ -31,6 +31,38 @@
     </div>
 
 
+    <h1>Inventario de Ferretería</h1>
+    <form id="inventoryForm">
+        <label for="nombre">Nombre del Producto:</label>
+        <input type="text" id="nombre" name="nombre" required>
+        
+        <label for="nombre">Codigo del Producto:</label>
+        <input type="text" id="codigo" name="codigo" required>
+
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" id="cantidad" name="cantidad" required>
+        
+        <label for="precio">Precio:</label>
+        <input type="number" step="0.01" id="precio" name="precio" required>
+        
+        <button type="submit">Agregar Producto</button>
+    </form>
+    
+    <table id="inventoryTable">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Codigo</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Acá se llenarían los datos -->
+        </tbody>
+    </table>
+    
+    <script src="script.js"></script>
 
 
 
