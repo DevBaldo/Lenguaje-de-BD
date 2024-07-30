@@ -129,6 +129,7 @@ CREATE TABLE Envios_Clientes (
 CREATE TABLE Forma_Pago (
     num_transaccion INT PRIMARY KEY,
     forma_pago VARCHAR2(50)
+    FOREIGN KEY (num_transaccion) REFERENCES Pagos(num_transaccion)
 );
 
 --Procedimiento para insertar una nueva sucursal
@@ -611,7 +612,3 @@ JOIN
     Envios_Clientes EC ON E.numero_envio = EC.numero_envio
 JOIN 
     Clientes C ON EC.cod_cliente = C.cod_cliente;
-
-
-
-
