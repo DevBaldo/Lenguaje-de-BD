@@ -1,14 +1,13 @@
 from flask import Flask, render_template, send_from_directory, request, redirect, url_for
 import cx_Oracle
-import random
 
 app = Flask(
     __name__,
-    template_folder='C:/Users/USUARIO/Documents/Lenguaje de Datos/Lenguaje-de-BD/FerreteriaElEncuentro/HTML',
+    template_folder='D:/Universidad/V Cuatrimestre/Lenguajes De Base De Datos/Proyecto/Lenguaje-de-BD/FerreteriaElEncuentro/HTML',
     static_folder=None
 )
 
-cx_Oracle.init_oracle_client(lib_dir= r"C:/Users/USUARIO/Documents/Lenguaje de Datos/instantclient_19_8/instantclient_23_4")
+cx_Oracle.init_oracle_client(lib_dir= r"C:\oracle\instantclient_19_8\instantclient_23_4")
 
 class Config:
     ORACLE_USER = 'proyecto'
@@ -22,6 +21,7 @@ def get_db_connection():
         dsn=Config.ORACLE_DSN
     )
     return connection
+
 
 @app.route("/")
 def index():
@@ -88,6 +88,7 @@ def delete_cliente(codigo):
 
     return redirect(url_for('clientes'))
 
+
 #####################Departamentos#####################
 @app.route("/departamentos", methods=['GET'])
 @app.route("/Departamentos", methods=['GET'])
@@ -99,6 +100,7 @@ def departamentos():
     cursor.close()
     connection.close()
     return render_template('departamentos.html', departamentos=departamentos)
+
 
 @app.route('/updateDepartamento/<codigo>', methods=['GET', 'POST'])
 def update_departamento(codigo):
@@ -125,6 +127,7 @@ def update_departamento(codigo):
         connection.close()
         return redirect('/departamentos')
 
+
 @app.route('/eliminarDepartamento/<codigo>')
 def eliminar_departamento(codigo):
     connection = get_db_connection()
@@ -135,6 +138,7 @@ def eliminar_departamento(codigo):
     connection.close()
 
     return redirect('/departamentos')
+
 
 @app.route('/addDepartamento', methods=['GET', 'POST'])
 def add_departamento():
@@ -155,19 +159,6 @@ def add_departamento():
 
         return redirect('/departamentos')
 
-def get_departamentos_eliminados():
-    connection = get_db_connection()
-    cursor = connection.cursor()
-    cursor.execute("SELECT audit_id, cod_departamento, nombre_departamento, descrip_departamento, audit_timestamp, audit_operation FROM Departamentos_Audit ORDER BY audit_timestamp DESC")
-    departamentos = cursor.fetchall()
-    cursor.close()
-    connection.close()
-    return departamentos
-
-@app.route('/verDepartamentosEliminados')
-def ver_departamentos_eliminados():
-    departamentos_eliminados = get_departamentos_eliminados()
-    return render_template('ver_departamentos_eliminados.html', departamentos=departamentos_eliminados)
 
 #####################Empleados#####################
 @app.route("/empleados", methods=['GET'])
@@ -184,6 +175,7 @@ def empleados():
         print(f"Empleado registrado: {cod_empleado}, {nombre}, {primer_apellido}, {segundo_apellido}, {correo}, {numero}, {departamento}")
         return redirect(url_for('empleados'))
     return render_template("Empleados.html")
+
 
 #####################Envios#####################
 @app.route("/envios", methods=['GET'])
@@ -248,11 +240,13 @@ def delete_envio(codigo_envio):
 
     return redirect(url_for('envios'))
 
+
 #####################Facturacion#####################
 @app.route("/facturacion", methods=['GET'])
 @app.route("/Facturacion", methods=['GET'])
 def facturacion():
     return render_template("Facturacion.html")
+
 
 #####################Inventario#####################
 @app.route("/inventario", methods=['GET'])
@@ -260,11 +254,13 @@ def facturacion():
 def inventario():
     return render_template("Inventario.html")
 
+
 #####################Pagos#####################
 @app.route("/pagos", methods=['GET'])
 @app.route("/Pagos", methods=['GET'])
 def pagos():
     return render_template("Pagos.html")
+
 
 #####################Productos#####################
 @app.route("/productos", methods=['GET'])
@@ -317,7 +313,8 @@ def anadirproductos():
         conn.close()
         
         return redirect(url_for('productos'))
-
+    
+    
 #####################Proveedores#####################
 @app.route("/proveedores", methods=['GET'])
 @app.route("/Proveedores", methods=['GET'])
@@ -330,6 +327,7 @@ def proveedores():
         return redirect(url_for('proveedores'))
     return render_template("Proveedores.html")
 
+
 #####################Sucursales#####################
 @app.route("/sucursales", methods=['GET'])
 @app.route("/Sucursales", methods=['GET'])
@@ -341,6 +339,7 @@ def sucursales():
     cursor.close()
     connection.close()
     return render_template('sucursales.html', sucursales=sucursales)
+
 
 @app.route('/updateSucursal/<codigo>', methods=['GET', 'POST'])
 def update_sucursal(codigo):
@@ -368,6 +367,7 @@ def update_sucursal(codigo):
         connection.close()
         return redirect('/sucursales')
 
+
 @app.route('/eliminarSucursal/<codigo>')
 def eliminar_sucursal(codigo):
     connection = get_db_connection()
@@ -378,6 +378,7 @@ def eliminar_sucursal(codigo):
     connection.close()
 
     return redirect('/sucursales')
+
 
 @app.route('/addSucursal', methods=['GET', 'POST'])
 def add_sucursal():
@@ -399,6 +400,7 @@ def add_sucursal():
 
         return redirect('/sucursales')
 
+
 def generate_unique_code():
     while True:
         codigo = random.randint(1000, 9999)
@@ -410,34 +412,21 @@ def generate_unique_code():
         connection.close()
         if count == 0:
             return codigo
-        
-def get_sucursales_eliminadas():
-    connection = get_db_connection()
-    cursor = connection.cursor()
-    cursor.execute("SELECT audit_id, cod_sucursal, Correo, Direccion, Telefono, audit_timestamp, audit_operation FROM Sucursal_Audit ORDER BY audit_timestamp DESC")
-    sucursales = cursor.fetchall()
-    cursor.close()
-    connection.close()
-    return sucursales
-
-@app.route('/verSucursalesEliminadas')
-def ver_sucursales_eliminadas():
-    sucursales_eliminadas = get_sucursales_eliminadas()
-    return render_template('ver_sucursales_eliminadas.html', sucursales=sucursales_eliminadas)
 
 
 #####################Recursos (CSS, JS, Recursos)#####################
 @app.route('/css/<path:path>')
 def send_css(path):
-    return send_from_directory('C:/Users/USUARIO/Documents/Lenguaje de Datos/Lenguaje-de-BD/FerreteriaElEncuentro/CSS', path)
+    return send_from_directory('D:/Universidad/V Cuatrimestre/Lenguajes De Base De Datos/Proyecto/Lenguaje-de-BD/FerreteriaElEncuentro/CSS', path)
 
 @app.route('/js/<path:path>')
 def send_js(path):
-    return send_from_directory('C:/Users/USUARIO/Documents/Lenguaje de Datos/Lenguaje-de-BD/FerreteriaElEncuentro/JS', path)
+    return send_from_directory('D:/Universidad/V Cuatrimestre/Lenguajes De Base De Datos/Proyecto/Lenguaje-de-BD/FerreteriaElEncuentro/JS', path)
 
 @app.route('/recursos/img/<path:path>')
 def send_img(path):
-    return send_from_directory('C:/Users/USUARIO/Documents/Lenguaje de Datos/Lenguaje-de-BD/FerreteriaElEncuentro/Recursos/img', path)
+    return send_from_directory('D:/Universidad/V Cuatrimestre/Lenguajes De Base De Datos/Proyecto/Lenguaje-de-BD/FerreteriaElEncuentro/Recursos/img', path)
+
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)
