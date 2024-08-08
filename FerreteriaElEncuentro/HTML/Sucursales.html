@@ -30,7 +30,39 @@
         <img src="/recursos/img/Banner.jpeg" alt="icono" class="banner"> 
     </div>
 
+    <div class="container2 mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1>Sucursales</h1>
 
+        </div><button class="btn btn-success"><a href="/addSucursal" class="text-white text-decoration-none">+ Agregar</a></button> 
+        <button class="btn btn-info"><a href="/verSucursalesEliminadas" class="text-white text-decoration-none">Ver Sucursales Eliminados</a></button><br><br>
+       
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Correo</th>
+                    <th>Dirección</th>
+                    <th>Teléfono</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for sucursal in sucursales %}
+            <tr>
+                <td>{{ sucursal[0] }}</td>
+                <td>{{ sucursal[1] }}</td>
+                <td>{{ sucursal[2] }}</td>
+                <td>{{ sucursal[3] }}</td>
+                <td class="d-flex align-items-center">
+                    <button class="btn btn-warning btn-sm me-2"><a href="{{ url_for('update_sucursal', codigo=sucursal[0]) }}" class="text-white text-decoration-none">Actualizar</a></button>
+                    <button class="btn btn-danger btn-sm"><a href="{{ url_for('eliminar_sucursal', codigo=sucursal[0]) }}" class="text-white text-decoration-none">Eliminar</a></button>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
 
 

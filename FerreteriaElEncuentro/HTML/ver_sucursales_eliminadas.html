@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Departamentos</title>
-<link rel="stylesheet" href="/css/style.css">
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Departamentos</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="icon">
@@ -29,31 +30,37 @@
     <div class="banner-container">
         <img src="/recursos/img/Banner.jpeg" alt="icono" class="banner"> 
     </div>
-    {% block content %}
     <div class="container2 mt-5">
+        <h1>Sucursales Eliminadas</h1>
         <button class="btn btn-primary mb-3"><a href="{{ url_for('sucursales') }}" style="color: white; text-decoration: none;">Volver</a></button>
-        
-        <h1>Agregar Sucursal</h1>
-        <form method="post">
-            <div class="form-group">
-                <label for="correo">Correo</label>
-                <input type="email" class="form-control" id="correo" name="correo" required>
-            </div>
-            <div class="form-group">
-                <label for="direccion">Dirección</label>
-                <input type="text" class="form-control" id="direccion" name="direccion" required>
-            </div>
-            <div class="form-group">
-                <label for="telefono">Teléfono</label>
-                <input type="text" class="form-control" id="telefono" name="telefono" required>
-            </div>
-            <button type="submit" class="btn btn-success">Agregar</button>
-        </form>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Audit ID</th>
+                    <th>Código de la Sucursal</th>
+                    <th>Correo</th>
+                    <th>Dirección</th>
+                    <th>Teléfono</th>
+                    <th>Fecha de Eliminación</th>
+                    <th>Operación</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sucursal in sucursales %}
+                <tr>
+                    <td>{{ sucursal[0] }}</td>
+                    <td>{{ sucursal[1] }}</td>
+                    <td>{{ sucursal[2] }}</td>
+                    <td>{{ sucursal[3] }}</td>
+                    <td>{{ sucursal[4] }}</td>
+                    <td>{{ sucursal[5] }}</td>
+                    <td>{{ sucursal[6] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-{% endblock %}
 
-
-    
     <footer>
         <div class="footer-columns">
             <div>
@@ -73,7 +80,6 @@
                 <img src="/recursos/img/redessociales.png" alt="productoimg" width="190" height="190" class="redes">
             </div>
     
-    
             <div>
                 <h5>Servicio Al Cliente</h5>
                 <h3 class="serviciocliente">+506 22244-556</h3>
@@ -88,5 +94,5 @@
         integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/JS/script.js">
-    </body>
+</body>
 </html>
