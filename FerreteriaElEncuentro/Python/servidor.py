@@ -4,7 +4,7 @@ import random
 
 app = Flask(
     __name__,
-    template_folder='C:/Users/USUARIO/Documents/Lenguaje de Datos/Lenguaje-de-BD/FerreteriaElEncuentro/HTML',
+    template_folder='C:/Users/USUARIO/Documents/Lenguaje de Datos/Avance final/Lenguaje-de-BD/FerreteriaElEncuentro/HTML',
     static_folder=None
 )
 
@@ -429,15 +429,15 @@ def ver_sucursales_eliminadas():
 #####################Recursos (CSS, JS, Recursos)#####################
 @app.route('/css/<path:path>')
 def send_css(path):
-    return send_from_directory('C:/Users/USUARIO/Documents/Lenguaje de Datos/Lenguaje-de-BD/FerreteriaElEncuentro/CSS', path)
+    return send_from_directory('C:/Users/USUARIO/Documents/Lenguaje de Datos/Avance final/Lenguaje-de-BD/FerreteriaElEncuentro/CSS', path)
 
 @app.route('/js/<path:path>')
 def send_js(path):
-    return send_from_directory('C:/Users/USUARIO/Documents/Lenguaje de Datos/Lenguaje-de-BD/FerreteriaElEncuentro/JS', path)
+    return send_from_directory('C:/Users/USUARIO/Documents/Lenguaje de Datos/Avance final/Lenguaje-de-BD/FerreteriaElEncuentro/JS', path)
 
 @app.route('/recursos/img/<path:path>')
 def send_img(path):
-    return send_from_directory('C:/Users/USUARIO/Documents/Lenguaje de Datos/Lenguaje-de-BD/FerreteriaElEncuentro/Recursos/img', path)
+    return send_from_directory('C:/Users/USUARIO/Documents/Lenguaje de Datos/Avance final/Lenguaje-de-BD/FerreteriaElEncuentro/Recursos/img', path)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)

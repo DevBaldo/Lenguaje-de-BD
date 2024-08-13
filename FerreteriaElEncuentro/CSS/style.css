@@ -223,3 +223,14 @@ footer {
     margin-top: 25px;
     margin-right: 05%;
 }
+.container2{
+    background-color: white;
+    padding-left: 100px;
+    border-radius: 8px;
+    padding-right: 100px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
