@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Departamentos</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Departamentos</title>
+<link rel="stylesheet" href="/css/style.css">
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="icon">
@@ -30,44 +29,37 @@
     <div class="banner-container">
         <img src="/recursos/img/Banner.jpeg" alt="icono" class="banner"> 
     </div>
-    <div class="container2 mt-5"> 
-        
-        <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="container2 mt-5">
+        <button class="btn btn-primary mb-3"><a href="{{ url_for('sucursales') }}" style="color: white; text-decoration: none;">Volver</a></button>
+    
+        <div class="container mt-5">
+            <h1 class="mb-4">Reporte de Sucursales Existentes </h1>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Código Sucursal</th>
+                        <th>Correo Sucursal</th>
+                        <th>Dirección Sucursal</th>
+                        <th>Teléfono Sucursal</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in sucursales_descripcion %}
+                    <tr>
+                        <td>{{ row[0] }}</td>
+                        <td>{{ row[1] }}</td>
+                        <td>{{ row[2] }}</td>
+                        <td>{{ row[3] }}</td>
+                        <td>{{ row[4] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
             
-            <h1>Departamentos</h1>
         </div>
-        <div class="d-flex">
-            <button class="btn btn-success mr-2"><a href="/addDepartamento" class="text-white text-decoration-none">+ Agregar</a></button>
-            <button class="btn btn-info"><a href="/verDepartamentosEliminados" class="text-white text-decoration-none">Ver Departamentos Eliminados</a></button>
-            <a href="/sucursal_departamentos" class="text-white text-decoration-none">
-                <i class="fas fa-chart-pie fa-2x" style="color: black; padding-left: 10px;"></i> Ver Sucursales y Departamentos
-            </a>
-        </div>
-        <br><br>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Codigo del Departamento</th>
-                <th>Nombre del Departamento</th>
-                <th>Descripción del Departamento</th>
-                <th>Acción</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for departamento in departamentos %}
-            <tr>
-                <td>{{ departamento[0] }}</td>
-                <td>{{ departamento[1] }}</td>
-                <td>{{ departamento[2] }}</td>
-                <td class="d-flex align-items-center">
-                    <button class="btn btn-warning btn-sm me-2"><a href="{{ url_for('update_departamento', codigo=departamento[0]) }}" class="text-white text-decoration-none">Actualizar</a></button>
-                    <button class="btn btn-danger btn-sm"><a href="{{ url_for('eliminar_departamento', codigo=departamento[0]) }}" class="text-white text-decoration-none">Eliminar</a></button></td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        
     </div>
+
 
     <footer>
         <div class="footer-columns">
@@ -88,6 +80,7 @@
                 <img src="/recursos/img/redessociales.png" alt="productoimg" width="190" height="190" class="redes">
             </div>
     
+    
             <div>
                 <h5>Servicio Al Cliente</h5>
                 <h3 class="serviciocliente">+506 22244-556</h3>
@@ -102,5 +95,5 @@
         integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/JS/script.js">
-</body>
+    </body>
 </html>

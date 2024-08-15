@@ -4,7 +4,7 @@ import random
 
 app = Flask(
     __name__,
-    template_folder='C:/Users/USUARIO/Documents/Lenguaje de Datos/Avance final/Lenguaje-de-BD/FerreteriaElEncuentro/HTML',
+    template_folder='C:/Users/USUARIO/Documents/Lenguaje de Datos/12-8/Lenguaje-de-BD/FerreteriaElEncuentro/HTML',
     static_folder=None
 )
 
@@ -168,6 +168,44 @@ def get_departamentos_eliminados():
 def ver_departamentos_eliminados():
     departamentos_eliminados = get_departamentos_eliminados()
     return render_template('ver_departamentos_eliminados.html', departamentos=departamentos_eliminados)
+
+@app.route('/sucursal_departamentos')
+def sucursal_departamentos():
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    try:
+        # Llamar a la función que devuelve el cursor
+        p_cursor = cursor.callfunc('FN_VISTA_SUCURSAL_DEPARTAMENTOS', cx_Oracle.CURSOR)
+        sucursal_departamentos = p_cursor.fetchall()
+    except cx_Oracle.DatabaseError as e:
+        error, = e.args
+        print(f"Error: {error.message}")
+        sucursal_departamentos = []
+
+    cursor.close()
+    connection.close()
+    
+    return render_template('sucursal_departamentos.html', sucursal_departamentos=sucursal_departamentos)
+
+
+@app.route('/vista_sucursal_descripcion')
+def vista_sucursal_descripcion():
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    try:
+        cursor.execute("SELECT * FROM VISTA_SUCURSAL_DESCRIPCION")
+        sucursales_descripcion = cursor.fetchall()
+    except cx_Oracle.DatabaseError as e:
+        error, = e.args
+        print(f"Error: {error.message}")
+        sucursales_descripcion = []
+
+    cursor.close()
+    connection.close()
+    
+    return render_template('vista_sucursal_descripcion.html', sucursales_descripcion=sucursales_descripcion)
 
 #####################Empleados#####################
 @app.route("/empleados", methods=['GET'])
@@ -429,15 +467,15 @@ def ver_sucursales_eliminadas():
 #####################Recursos (CSS, JS, Recursos)#####################
 @app.route('/css/<path:path>')
 def send_css(path):
-    return send_from_directory('C:/Users/USUARIO/Documents/Lenguaje de Datos/Avance final/Lenguaje-de-BD/FerreteriaElEncuentro/CSS', path)
+    return send_from_directory('C:/Users/USUARIO/Documents/Lenguaje de Datos/12-8/Lenguaje-de-BD/FerreteriaElEncuentro/CSS', path)
 
 @app.route('/js/<path:path>')
 def send_js(path):
-    return send_from_directory('C:/Users/USUARIO/Documents/Lenguaje de Datos/Avance final/Lenguaje-de-BD/FerreteriaElEncuentro/JS', path)
+    return send_from_directory('C:/Users/USUARIO/Documents/Lenguaje de Datos/12-8/Lenguaje-de-BD/FerreteriaElEncuentro/JS', path)
 
 @app.route('/recursos/img/<path:path>')
 def send_img(path):
-    return send_from_directory('C:/Users/USUARIO/Documents/Lenguaje de Datos/Avance final/Lenguaje-de-BD/FerreteriaElEncuentro/Recursos/img', path)
+    return send_from_directory('C:/Users/USUARIO/Documents/Lenguaje de Datos/12-8/Lenguaje-de-BD/FerreteriaElEncuentro/Recursos/img', path)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)
