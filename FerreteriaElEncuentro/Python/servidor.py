@@ -4,11 +4,20 @@ from datetime import datetime
 
 app = Flask(
     __name__,
+<<<<<<< Updated upstream
     template_folder=r'C:\Users\Morgan\Documents\Lenguaje-de-BD\FerreteriaElEncuentro\HTML',
     static_folder=None
 )
 
 # Configuración de la base de datos Oracle
+=======
+    template_folder='C:\Users\Morgan\Documents\Lenguaje-de-BD\FerreteriaElEncuentro\HTML',
+    static_folder=None
+)
+
+cx_Oracle.init_oracle_client(lib_dir= r"C:\Users\Morgan\Documents\instantclient_23_4")
+
+>>>>>>> Stashed changes
 class Config:
     ORACLE_USER = 'proyecto'
     ORACLE_PASSWORD = '123'
