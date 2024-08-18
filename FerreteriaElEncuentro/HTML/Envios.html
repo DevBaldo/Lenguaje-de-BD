@@ -1,29 +1,28 @@
 <!DOCTYPE html>
-<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Envios - El Encuentro</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Departamentos</title>
+<link rel="stylesheet" href="/css/style.css">
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="icon">
-        <a href="/" class="icon-text"><img src="/recursos/img/logo.png" alt="icono" class="iconimg"> <h1>El Encuentro</h1> </a>
+        <a href="/" class="icon-text"><img src="/recursos/img/logo.png" alt="icono" class="iconimg"> <h2>El Encuentro</h2> </a>
     </div>
 
     <div>
         <nav class="navbar">
-            <a href="/Proveedores"> <h4>Proveedores </h4></a>
-            <a href="/Productos"> <h4>Productos </h4></a>
-            <a href="/Sucursales"> <h4>Sucursales </h4></a>
-            <a href="/Departamentos"> <h4>Departamentos </h4></a>
-            <a href="/Empleados"> <h4>Empleados </h4></a>
-            <a href="/Clientes"> <h4>Clientes </h4></a>
-            <a href="/Inventario"> <h4>Inventario </h4></a>
-            <a href="/Facturacion"> <h4>Facturacion </h4></a>
-            <a href="/Pagos"> <h4>Pagos </h4></a>
-            <a href="/Envios"> <h4>Envios </h4></a>
+            <a href="/Proveedores"> <h6>Proveedores </h6></a>
+            <a href="/Productos"> <h6>Productos </h6></a>
+            <a href="/Sucursales"> <h6>Sucursales </h6></a>
+            <a href="/Departamentos"> <h6>Departamentos </h6></a>
+            <a href="/Empleados"> <h6>Empleados </h6></a>
+            <a href="/Clientes"> <h6>Clientes </h6></a>
+            <a href="/Inventario"> <h6>Inventario </h6></a>
+            <a href="/Facturacion"> <h6>Facturacion </h6></a>
+            <a href="/Pagos"> <h6>Pagos </h6></a>
+            <a href="/Envios"> <h6>Envios </h6></a>
         </nav>
     </div>
 
@@ -31,9 +30,12 @@
         <img src="/recursos/img/Banner.jpeg" alt="icono" class="banner"> 
     </div>
 
+
+
+
     <div class="container mt-5">
         <h2>Gestión de Envíos</h2>
-
+    
         <div class="row">
             <div class="col-md-6">
                 <div class="card mb-4">
@@ -72,7 +74,7 @@
                     </div>
                 </div>
             </div>
-
+    
             <div class="col-md-6">
                 <div class="card mb-4">
                     <div class="card-header bg-dark text-white">
@@ -103,7 +105,7 @@
                                         <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteEnvioModal{{ envio[0] }}">Eliminar</button>
                                     </td>
                                 </tr>
-
+    
                                 <!-- Modal Editar Envío -->
                                 <div class="modal fade" id="editEnvioModal{{ envio[0] }}" tabindex="-1" aria-labelledby="editEnvioModalLabel{{ envio[0] }}" aria-hidden="true">
                                     <div class="modal-dialog">
@@ -141,7 +143,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+    
                                 <!-- Modal Eliminar Envío -->
                                 <div class="modal fade" id="deleteEnvioModal{{ envio[0] }}" tabindex="-1" aria-labelledby="deleteEnvioModalLabel{{ envio[0] }}" aria-hidden="true">
                                     <div class="modal-dialog">
@@ -169,24 +171,48 @@
         </div>
     </div>
 
+
+
+
+
+
+
+
+
+    
     <footer>
         <div class="footer-columns">
-            <div class="footer-column">
-                <h3>Nosotros</h3>
-                <p>Ubicados en el corazón de Costa Rica, en El Encuentro nos dedicamos a ofrecer productos de calidad para todas tus necesidades de construcción y remodelación. Nuestra empresa fue fundada con el objetivo de aplicar los conocimientos adquiridos en lenguajes de bases de datos, asegurando un manejo eficiente y moderno de nuestro inventario y servicios. Nos enorgullecemos de brindar atención personalizada y soluciones innovadoras para nuestros clientes. ¡Visítanos y encuentra todo lo que necesitas para tus proyectos!</p>
+            <div>
+                <h5>Nosotros</h5>
+                <p class="nosotros">
+                    Ubicados en el corazón de Costa Rica, en El Encuentro nos dedicamos a ofrecer productos de calidad para
+                    todas tus necesidades de construcción y remodelación. Nuestro proyecto fue creado con el objetivo de
+                    aplicar los conocimientos adquiridos en lenguajes de bases de datos, asegurando un manejo eficiente y
+                    moderno de nuestro inventario y servicios.
+                    Nos enorgullecemos de brindar atención personalizada y soluciones innovadoras para nuestros clientes.
+                    ¡Visítanos y encuentra todo lo que necesitas para tus proyectos!
+                </p>
             </div>
-            <div class="footer-column">
-                <h3>Síguenos en</h3>
-                <img src="/recursos/img/redessociales.png" alt="Redes Sociales" width="220" height="220">
+    
+            <div>
+                <h5>Siguenos en</h5>
+                <img src="/recursos/img/redessociales.png" alt="productoimg" width="190" height="190" class="redes">
             </div>
-            <div class="footer-column">
-                <h3>Servicio Al Cliente</h3>
-                <h2>+506 22244-556</h2>
+    
+    
+            <div>
+                <h5>Servicio Al Cliente</h5>
+                <h3 class="serviciocliente">+506 22244-556</h3>
             </div>
+    
         </div>
     </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
-</body>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/JS/script.js">
+    </body>
 </html>

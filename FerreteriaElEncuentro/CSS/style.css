@@ -1,5 +1,5 @@
 body {
-background-color: #555856;
+background-color: #555856 !important;
 }
 
 .icon {
@@ -11,15 +11,15 @@ background-color: #555856;
     width: 72px;
 }
 
-h3{
+h1{
     font-family: 'Anton', sans-serif;
 }
 
 .icon-text {
     display: flex;
     align-items: center;
-    text-decoration: none;
-    color: white;
+    text-decoration: none !important;
+    color: white !important;
 }
 
 .navbar {
@@ -30,8 +30,8 @@ h3{
 }
 
 .navbar a {
-    text-decoration: none; 
-    color: white; 
+    text-decoration: none !important; 
+    color: white ; 
     margin: 0 20px;
    
 }
@@ -71,16 +71,30 @@ h3{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 23%; 
+    width: 70%; 
     margin: 15px; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6); 
     border-radius: 15px;
+    position: relative;
+}
+
+.productoimg-container {
+    position: relative;
+    width: 100%;
 }
 
 .productoimg {
     width: 100%;
     height: auto;
     border-radius: 15px;
+}
+
+.close-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px;
+    cursor: pointer;
 }
 
 .producto1 p {
@@ -194,4 +208,29 @@ footer {
 .nosotros{
     margin-right: 22px;
     margin-top: 30px;
+    font-size: 15px;
 }
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.btn-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin-top: 25px;
+    margin-right: 05%;
+}
+.container2{
+    background-color: white;
+    padding-left: 100px;
+    border-radius: 8px;
+    padding-right: 100px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
