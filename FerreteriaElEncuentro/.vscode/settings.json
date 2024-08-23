@@ -1,0 +1,25 @@
+{
+    "liveServer.settings.port": 5501,
+    "oracledevtools.connections": [
+        {
+            "authenticationType": 2,
+            "dBAPrivilege": "None",
+            "userID": "JESS",
+            "passwordSaved": true,
+            "dataSource": "localhost:1521/orcl",
+            "connectionType": 2,
+            "databaseHostName": "localhost",
+            "databasePortNumber": "1521",
+            "databaseServiceName": "orcl",
+            "tnsAdmin": "C:\\Users\\jmarin\\Oracle\\network\\admin",
+            "name": "ProyectoFinalLBD.orcl",
+            "color": "none",
+            "currentSchema": "",
+            "addSettingsScopeToConnectionName": false,
+            "addCurrentSchemaToConnectionName": false,
+            "filters": [],
+            "useCompatibleNamesDirectoryPath": true,
+            "passwordStore": "Secret Storage"
+        }
+    ]
+}
