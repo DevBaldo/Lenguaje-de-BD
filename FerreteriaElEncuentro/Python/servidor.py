@@ -1,23 +1,25 @@
 from flask import Flask, render_template, send_from_directory
+import cx_Oracle
 
 app = Flask(
     __name__,
-    template_folder='D:/Universidad/V Cuatrimestre/Lenguajes De Base De Datos/Proyecto/Lenguaje-de-BD/FerreteriaElEncuentro/HTML',
+    template_folder='C:/Users/jmarin/LenguajeBaseDatosProyecto/Lenguaje-de-BD/FerreteriaElEncuentro/HTML',
     static_folder=None
 )
 
-cx_Oracle.init_oracle_client(lib_dir= r"C:/Users/USUARIO/Documents/Lenguaje de Datos/instantclient_19_8/instantclient_23_4")
 
 class Config:
-    ORACLE_USER = 'proyecto'
-    ORACLE_PASSWORD = 'admin123'
-    ORACLE_DSN = 'localhost/orcl'
+    ORACLE_USER = 'JESS'
+    ORACLE_PASSWORD = 'Jm12345'
+    ORACLE_DSN = 'localhost:1521/orcl'
+    TNS_ADMIN = r'C:\Users\jmarin\Oracle\network\admin'
 
 def get_db_connection():
     connection = cx_Oracle.connect(
         user=Config.ORACLE_USER,
         password=Config.ORACLE_PASSWORD,
-        dsn=Config.ORACLE_DSN
+        dsn=Config.ORACLE_DSN,
+
     )
     return connection
 
@@ -465,15 +467,15 @@ def ver_sucursales_eliminadas():
 #####################Recursos (CSS, JS, Recursos)#####################
 @app.route('/css/<path:path>')
 def send_css(path):
-    return send_from_directory('D:/Universidad/V Cuatrimestre/Lenguajes De Base De Datos/Proyecto/Lenguaje-de-BD/FerreteriaElEncuentro/CSS', path)
+    return send_from_directory('C:/Users/jmarin/LenguajeBaseDatosProyecto/Lenguaje-de-BD/FerreteriaElEncuentro/CSS', path)
 
 @app.route('/js/<path:path>')
 def send_js(path):
-    return send_from_directory('D:/Universidad/V Cuatrimestre/Lenguajes De Base De Datos/Proyecto/Lenguaje-de-BD/FerreteriaElEncuentro/JS', path)
+    return send_from_directory('C:/Users/jmarin/LenguajeBaseDatosProyecto/Lenguaje-de-BD/FerreteriaElEncuentro/JS', path)
 
 @app.route('/recursos/img/<path:path>')
 def send_img(path):
-    return send_from_directory('D:/Universidad/V Cuatrimestre/Lenguajes De Base De Datos/Proyecto/Lenguaje-de-BD/FerreteriaElEncuentro/Recursos/img', path)
+    return send_from_directory('C:/Users/jmarin/LenguajeBaseDatosProyecto/Lenguaje-de-BD/FerreteriaElEncuentro/Recursos/img', path)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)
