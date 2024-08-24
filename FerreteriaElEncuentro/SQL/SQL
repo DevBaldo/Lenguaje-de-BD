@@ -27,14 +27,6 @@ CREATE TABLE Departamentos (
     descrip_departamento VARCHAR2(200)
 );
 
--- INSERT INTO Departamentos(cod_departamento,nombre_departamento,descrip_departamento) VALUES(1,'Departamento de Finanzas', 'Responsable de gestionar los recursos financieros');
--- INSERT INTO Departamentos(cod_departamento,nombre_departamento,descrip_departamento) VALUES(2,'Departamento de Cobros', 'Responsable de gestionar los cobros.');
--- INSERT INTO Departamentos(cod_departamento,nombre_departamento,descrip_departamento) VALUES(3,'Departamento de Recursos Huamnos', 'Responsable de gestionar los recursos humanos de la empresa');
-
-
-select * from Departamentos;
-
-
 -- Table: Empleados
 CREATE TABLE Empleados (
     cod_empleado INT PRIMARY KEY,
@@ -73,8 +65,6 @@ CREATE TABLE Productos (
     cod_inventario INT,
     FOREIGN KEY (cod_inventario) REFERENCES Inventarios(cod_inventario)
 );
-select * from productos
-
 
 -- Table: Facturacion
 CREATE TABLE Facturacion (
@@ -102,7 +92,6 @@ CREATE TABLE Clientes (
     FOREIGN KEY (num_transaccion) REFERENCES Pagos(num_transaccion)
 );
 
-
 -- Table: Productos_Clientes
 CREATE TABLE Productos_Clientes (
     cod_producto INT,
@@ -129,7 +118,6 @@ CREATE TABLE Envios_Clientes (
 CREATE TABLE Forma_Pago (
     num_transaccion INT PRIMARY KEY,
     forma_pago VARCHAR2(50)
-    FOREIGN KEY (num_transaccion) REFERENCES Pagos(num_transaccion)
 );
 
 --Procedimiento para insertar una nueva sucursal
@@ -260,18 +248,69 @@ BEGIN
     );
 END;
 
---vista sucursal
-CREATE OR REPLACE VIEW Sucursal_Departamentos_View AS
-SELECT Sucursal.cod_sucursal, 
-       Sucursal.Correo, 
-       Sucursal.Direccion, 
-       Sucursal.Telefono, 
-       Departamentos.cod_departamento, 
-       Departamentos.nombre_departamento, 
-       Departamentos.descrip_departamento
-FROM Sucursal
-JOIN Sucursal_Departamentos ON Sucursal.cod_sucursal = Sucursal_Departamentos.cod_sucursal
-JOIN Departamentos ON Sucursal_Departamentos.cod_departamento = Departamentos.cod_departamento;
+--vista Sucursal_Departamentos
+CREATE OR REPLACE VIEW VISTA_SUCURSAL_DEPARTAMENTOS AS
+SELECT 
+    sd.cod_sucursal,
+    s.Correo,
+    s.Direccion,
+    s.Telefono,
+    sd.cod_departamento,
+    d.nombre_departamento,
+    d.descrip_departamento
+FROM 
+    Sucursal_Departamentos sd
+JOIN 
+    Sucursal s ON sd.cod_sucursal = s.cod_sucursal
+JOIN 
+    Departamentos d ON sd.cod_departamento = d.cod_departamento;
+
+--funcion que devuelve un cursor 
+CREATE OR REPLACE FUNCTION FN_VISTA_SUCURSAL_DEPARTAMENTOS
+RETURN SYS_REFCURSOR
+AS
+    p_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN p_cursor FOR
+        SELECT * FROM VISTA_SUCURSAL_DEPARTAMENTOS;
+    
+    RETURN p_cursor;
+END FN_VISTA_SUCURSAL_DEPARTAMENTOS;
+/
+
+----Vista sucursal
+CREATE OR REPLACE FUNCTION FN_DESCRIPCION_SUCURSAL(
+    p_cod_sucursal IN Sucursal.cod_sucursal%TYPE
+) RETURN VARCHAR2 AS
+    v_descripcion VARCHAR2(255);
+BEGIN
+    -- Creamos una descripción personalizada basada en el código de la sucursal
+    SELECT 'La sucursal ' || Correo || ' ubicada en ' || Direccion
+    INTO v_descripcion
+    FROM Sucursal
+    WHERE cod_sucursal = p_cod_sucursal;
+    
+    -- Devolvemos la descripción
+    RETURN v_descripcion;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 'Descripción no disponible';
+    WHEN OTHERS THEN
+        RETURN 'Error al generar la descripción';
+END FN_DESCRIPCION_SUCURSAL;
+
+CREATE OR REPLACE VIEW VISTA_SUCURSAL_DESCRIPCION AS
+SELECT 
+    cod_sucursal AS Codigo_Sucursal,
+    Correo AS Correo_Sucursal,
+    Direccion AS Direccion_Sucursal,
+    Telefono AS Telefono_Sucursal,
+    FN_DESCRIPCION_SUCURSAL(cod_sucursal) AS Descripcion_Sucursal
+FROM 
+    Sucursal;
+
+SELECT * FROM VISTA_SUCURSAL_DESCRIPCION;
+
 
 
 --vista proveedores
@@ -455,43 +494,47 @@ CREATE OR REPLACE VIEW Vista_Empleados AS
 SELECT cod_empleado, nombre, primer_apellido, segundo_apellido, correo, numero, departamento
 FROM Empleados;
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+--Procedimientos Clientes y Envios
+
 --Agregar cliente
-CREATE OR REPLACE PROCEDURE insertar_cliente(
-    p_cod_cliente IN CLIENTES.cod_cliente%TYPE,
-    p_nombre IN CLIENTES.Nombre%TYPE,
-    p_primerApellido IN CLIENTES.primerApellido%TYPE,
-    p_segundoApellido IN CLIENTES.segundoApellido%TYPE,
-    p_numero IN CLIENTES.Numero%TYPE,
-    p_correo IN CLIENTES.Correo%TYPE,
-    p_numero_factura IN CLIENTES.numero_factura%TYPE,
-    p_num_transaccion IN CLIENTES.num_transaccion%TYPE
-) IS
+CREATE OR REPLACE PROCEDURE sp_insertar_cliente(
+    p_cod_cliente IN INT,
+    p_nombre IN VARCHAR2,
+    p_primerApellido IN VARCHAR2,
+    p_segundoApellido IN VARCHAR2,
+    p_numero IN VARCHAR2,
+    p_correo IN VARCHAR2,
+    p_numero_factura IN INT,
+    p_num_transaccion IN INT
+) AS
 BEGIN
-    INSERT INTO CLIENTES (
-        cod_cliente, Nombre, primerApellido, segundoApellido, Numero, Correo, numero_factura, num_transaccion
-    ) VALUES (
-        p_cod_cliente, p_nombre, p_primerApellido, p_segundoApellido, p_numero, p_correo, p_numero_factura, p_num_transaccion
-    );
-END insertar_cliente;
-
-
+    INSERT INTO Clientes (cod_cliente, Nombre, primerApellido, segundoApellido, Numero, Correo, numero_factura, num_transaccion)
+    VALUES (p_cod_cliente, p_nombre, p_primerApellido, p_segundoApellido, p_numero, p_correo, p_numero_factura, p_num_transaccion);
+END;
 
 --Actualizar cliente
-CREATE OR REPLACE PROCEDURE actualizar_cliente(
-    p_codigo IN CLIENTES.CODIGO%TYPE,
-    p_nombre IN CLIENTES.NOMBRE%TYPE,
-    p_apellido IN CLIENTES.APELLIDO%TYPE,
-    p_telefono IN CLIENTES.TELEFONO%TYPE,
-    p_correo IN CLIENTES.CORREO%TYPE
-) IS
+CREATE OR REPLACE PROCEDURE sp_actualizar_cliente(
+    p_cod_cliente IN INT,
+    p_nombre IN VARCHAR2,
+    p_primerApellido IN VARCHAR2,
+    p_segundoApellido IN VARCHAR2,
+    p_numero IN VARCHAR2,
+    p_correo IN VARCHAR2,
+    p_numero_factura IN INT,
+    p_num_transaccion IN INT
+) AS
 BEGIN
-    UPDATE CLIENTES
-    SET NOMBRE = p_nombre,
-        APELLIDO = p_apellido,
-        TELEFONO = p_telefono,
-        CORREO = p_correo
-    WHERE CODIGO = p_codigo;
-END actualizar_cliente;
+    UPDATE Clientes
+    SET Nombre = p_nombre,
+        primerApellido = p_primerApellido,
+        segundoApellido = p_segundoApellido,
+        Numero = p_numero,
+        Correo = p_correo,
+        numero_factura = p_numero_factura,
+        num_transaccion = p_num_transaccion
+    WHERE cod_cliente = p_cod_cliente;
+END;
 
 --Eliminar cliente
 CREATE OR REPLACE PROCEDURE actualizar_cliente(
@@ -516,18 +559,26 @@ BEGIN
     WHERE cod_cliente = p_cod_cliente;
 END actualizar_cliente;
 
-
-
----------------------------------------------------------------------------------------------------
---Agregar envio
-CREATE OR REPLACE PROCEDURE insertar_envio(
-    p_numero_envio IN Envios.numero_envio%TYPE,
-    p_direccion IN Envios.Direccion%TYPE
-) IS
+-- Asignar envio a cliente
+CREATE OR REPLACE PROCEDURE sp_asignar_envio_cliente(
+    p_cod_cliente IN INT,
+    p_numero_envio IN INT
+) AS
 BEGIN
-    INSERT INTO Envios (numero_envio, Direccion)
-    VALUES (p_numero_envio, p_direccion);
-END insertar_envio;
+    INSERT INTO Envios_Clientes (cod_cliente, numero_envio)
+    VALUES (p_cod_cliente, p_numero_envio);
+END;
+
+--Agregar envio
+CREATE OR REPLACE PROCEDURE sp_registrar_envio(
+    p_numero_envio IN INT,
+    p_direccion IN VARCHAR2,
+    p_cod_cliente IN INT
+) AS
+BEGIN
+    INSERT INTO Envios (numero_envio, Direccion) VALUES (p_numero_envio, p_direccion);
+    INSERT INTO Envios_Clientes (cod_cliente, numero_envio) VALUES (p_cod_cliente, p_numero_envio);
+END;
 
 
 --Editar envio
@@ -549,17 +600,6 @@ CREATE OR REPLACE PROCEDURE eliminar_envio(
 BEGIN
     DELETE FROM Envios WHERE numero_envio = p_numero_envio;
 END eliminar_envio;
-
-----------------------------------------------------------------------------------------------------------
---Envio_Clientes
-CREATE OR REPLACE PROCEDURE insertar_envio_cliente(
-    p_cod_cliente IN Envios_Clientes.cod_cliente%TYPE,
-    p_numero_envio IN Envios_Clientes.numero_envio%TYPE
-) IS
-BEGIN
-    INSERT INTO Envios_Clientes (cod_cliente, numero_envio)
-    VALUES (p_cod_cliente, p_numero_envio);
-END insertar_envio_cliente;
 
 ---Actualizar Envio_Clientes
 CREATE OR REPLACE PROCEDURE actualizar_envio_cliente(
@@ -584,6 +624,9 @@ BEGIN
     DELETE FROM Envios_Clientes
     WHERE cod_cliente = p_cod_cliente AND numero_envio = p_numero_envio;
 END eliminar_envio_cliente;
+
+
+-- Vistas Clientes y Envios
 
 --vista de datos de clientes
 CREATE OR REPLACE VIEW VISTA_CLIENTES AS
@@ -612,3 +655,186 @@ JOIN
     Envios_Clientes EC ON E.numero_envio = EC.numero_envio
 JOIN 
     Clientes C ON EC.cod_cliente = C.cod_cliente;
+
+
+-- Funciones Clientes y Envios
+
+--Contar Envios
+CREATE OR REPLACE FUNCTION fn_contar_envios_cliente(
+    p_cod_cliente IN INT
+) RETURN INT AS
+    v_count INT;
+BEGIN
+    SELECT COUNT(*)
+    INTO v_count
+    FROM Envios_Clientes
+    WHERE cod_cliente = p_cod_cliente;
+    
+    RETURN v_count;
+END;
+
+-- Validar correo
+CREATE OR REPLACE FUNCTION fn_validar_correo_cliente(
+    p_correo IN VARCHAR2
+) RETURN BOOLEAN AS
+    v_count INT;
+BEGIN
+    SELECT COUNT(*)
+    INTO v_count
+    FROM Clientes
+    WHERE Correo = p_correo;
+    
+    RETURN v_count > 0;
+END;
+
+-- Obtener nombre del cliente
+CREATE OR REPLACE FUNCTION fn_obtener_nombre_cliente(
+    p_cod_cliente IN INT
+) RETURN VARCHAR2 AS
+    v_nombre VARCHAR2(300);
+BEGIN
+    SELECT Nombre || ' ' || primerApellido || ' ' || segundoApellido
+    INTO v_nombre
+    FROM Clientes
+    WHERE cod_cliente = p_cod_cliente;
+    
+    RETURN v_nombre;
+END;
+
+-- Paquetes Clientes y Envios
+
+-- Gestionar Clientes
+CREATE OR REPLACE PACKAGE pkg_gestion_clientes AS
+    PROCEDURE insertar_cliente(
+        p_cod_cliente IN INT,
+        p_nombre IN VARCHAR2,
+        p_primerApellido IN VARCHAR2,
+        p_segundoApellido IN VARCHAR2,
+        p_numero IN VARCHAR2,
+        p_correo IN VARCHAR2,
+        p_numero_factura IN INT,
+        p_num_transaccion IN INT);
+    
+    PROCEDURE actualizar_cliente(
+        p_cod_cliente IN INT,
+        p_nombre IN VARCHAR2,
+        p_primerApellido IN VARCHAR2,
+        p_segundoApellido IN VARCHAR2,
+        p_numero IN VARCHAR2,
+        p_correo IN VARCHAR2,
+        p_numero_factura IN INT,
+        p_num_transaccion IN INT);
+    
+    PROCEDURE eliminar_cliente(p_cod_cliente IN INT);
+END pkg_gestion_clientes;
+
+CREATE OR REPLACE PACKAGE BODY pkg_gestion_clientes AS
+    PROCEDURE insertar_cliente(
+        p_cod_cliente IN INT,
+        p_nombre IN VARCHAR2,
+        p_primerApellido IN VARCHAR2,
+        p_segundoApellido IN VARCHAR2,
+        p_numero IN VARCHAR2,
+        p_correo IN VARCHAR2,
+        p_numero_factura IN INT,
+        p_num_transaccion IN INT) AS
+    BEGIN
+        sp_insertar_cliente(p_cod_cliente, p_nombre, p_primerApellido, p_segundoApellido, p_numero, p_correo, p_numero_factura, p_num_transaccion);
+    END;
+    
+    PROCEDURE actualizar_cliente(
+        p_cod_cliente IN INT,
+        p_nombre IN VARCHAR2,
+        p_primerApellido IN VARCHAR2,
+        p_segundoApellido IN VARCHAR2,
+        p_numero IN VARCHAR2,
+        p_correo IN VARCHAR2,
+        p_numero_factura IN INT,
+        p_num_transaccion IN INT) AS
+    BEGIN
+        sp_actualizar_cliente(p_cod_cliente, p_nombre, p_primerApellido, p_segundoApellido, p_numero, p_correo, p_numero_factura, p_num_transaccion);
+    END;
+    
+    PROCEDURE eliminar_cliente(p_cod_cliente IN INT) AS
+    BEGIN
+        sp_eliminar_cliente(p_cod_cliente);
+    END;
+END pkg_gestion_clientes;
+
+
+-- Gestionar Envios
+CREATE OR REPLACE PACKAGE pkg_gestion_envios AS
+    PROCEDURE registrar_envio(
+        p_numero_envio IN INT,
+        p_direccion IN VARCHAR2,
+        p_cod_cliente IN INT);
+    
+    PROCEDURE asignar_envio_cliente(
+        p_cod_cliente IN INT,
+        p_numero_envio IN INT);
+END pkg_gestion_envios;
+CREATE OR REPLACE PACKAGE BODY pkg_gestion_envios AS
+    PROCEDURE registrar_envio(
+        p_numero_envio IN INT,
+        p_direccion IN VARCHAR2,
+        p_cod_cliente IN INT) AS
+    BEGIN
+        sp_registrar_envio(p_numero_envio, p_direccion, p_cod_cliente);
+    END;
+    
+    PROCEDURE asignar_envio_cliente(
+        p_cod_cliente IN INT,
+        p_numero_envio IN INT) AS
+    BEGIN
+        sp_asignar_envio_cliente(p_cod_cliente, p_numero_envio);
+    END;
+END pkg_gestion_envios;
+
+
+-- Triggers Clientes y Envios
+
+-- Validar numero cliente
+CREATE OR REPLACE TRIGGER trg_validar_numero_cliente
+BEFORE INSERT OR UPDATE ON Clientes
+FOR EACH ROW
+BEGIN
+    IF :NEW.Numero IS NOT NULL AND NOT REGEXP_LIKE(:NEW.Numero, '^\d{4}-\d{4}$') THEN
+        RAISE_APPLICATION_ERROR(-20001, 'El número de teléfono debe estar en el formato XXXX-XXXX');
+    END IF;
+END;
+
+
+-- Cursores Clientes y Envios
+
+CREATE OR REPLACE PACKAGE pkg_cursores AS
+    CURSOR cur_clientes_con_envios IS
+        SELECT c.cod_cliente, c.Nombre, c.primerApellido, c.segundoApellido
+        FROM Clientes c
+        WHERE EXISTS (
+            SELECT 1
+            FROM Envios_Clientes ec
+            WHERE ec.cod_cliente = c.cod_cliente
+        );
+END pkg_cursores;
+
+CREATE OR REPLACE PACKAGE pkg_cursores AS
+    CURSOR cur_envios_sin_cliente IS
+        SELECT e.numero_envio, e.Direccion
+        FROM Envios e
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM Envios_Clientes ec
+            WHERE ec.numero_envio = e.numero_envio
+        );
+END pkg_cursores;
+
+CREATE OR REPLACE PACKAGE pkg_cursores AS
+    CURSOR cur_clientes_sin_envios IS
+        SELECT c.cod_cliente, c.Nombre, c.primerApellido, c.segundoApellido
+        FROM Clientes c
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM Envios_Clientes ec
+            WHERE ec.cod_cliente = c.cod_cliente
+        );
+END pkg_cursores;

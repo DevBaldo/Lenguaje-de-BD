@@ -11,6 +11,20 @@
         <a href="/" class="icon-text"><img src="/recursos/img/logo.png" alt="icono" class="iconimg"> <h2>El Encuentro</h2> </a>
     </div>
 
+    <!-- Alerta de mensajes flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container mt-3">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
     <div>
         <nav class="navbar">
             <a href="/Proveedores"> <h6>Proveedores </h6></a>
@@ -40,44 +54,59 @@
                 <div class="card-body">
                     <form action="/clientes" method="post">
                         <div class="form-group">
-                            <label for="codigo">Código de Cliente:</label>
-                            <input type="text" class="form-control" id="codigo" name="codigo">
+                            <label for="cod_cliente">Código de Cliente:</label>
+                            <input type="text" class="form-control" id="cod_cliente" name="cod_cliente">
                         </div>
                         <div class="form-group">
                             <label for="nombre">Nombre:</label>
                             <input type="text" class="form-control" id="nombre" name="nombre">
                         </div>
                         <div class="form-group">
-                            <label for="apellido">Apellido:</label>
-                            <input type="text" class="form-control" id="apellido" name="apellido">
+                            <label for="primer_apellido">Primer Apellido:</label>
+                            <input type="text" class="form-control" id="primer_apellido" name="primer_apellido">
                         </div>
                         <div class="form-group">
-                            <label for="telefono">Número de Contacto:</label>
-                            <input type="text" class="form-control" id="telefono" name="telefono">
+                            <label for="segundo_apellido">Segundo Apellido:</label>
+                            <input type="text" class="form-control" id="segundo_apellido" name="segundo_apellido">
+                        </div>
+                        <div class="form-group">
+                            <label for="numero">Número de Contacto:</label>
+                            <input type="text" class="form-control" id="numero" name="numero">
                         </div>
                         <div class="form-group">
                             <label for="correo">Correo Electrónico:</label>
                             <input type="email" class="form-control" id="correo" name="correo">
+                        </div>
+                        <div class="form-group">
+                            <label for="numero_factura">Número de Factura:</label>
+                            <input type="text" class="form-control" id="numero_factura" name="numero_factura">
+                        </div>
+                        <div class="form-group">
+                            <label for="num_transaccion">Número de Transacción:</label>
+                            <input type="text" class="form-control" id="num_transaccion" name="num_transaccion">
                         </div>
                         <button type="submit" class="btn btn-primary">Registrar</button>
                     </form>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-12">
             <div class="card">
                 <div class="card-header bg-dark text-white">
                     Lista de Clientes
                 </div>
-                <div class="card-body">
+                <div class="card-body table-responsive">
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th>Código</th>
                                 <th>Nombre</th>
-                                <th>Apellido</th>
-                                <th>Teléfono</th>
+                                <th>Primer Apellido</th>
+                                <th>Segundo Apellido</th>
+                                <th>Número</th>
                                 <th>Correo</th>
+                                <th>Factura</th>
+                                <th>Transacción</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -89,9 +118,13 @@
                                 <td>{{ cliente[2] }}</td>
                                 <td>{{ cliente[3] }}</td>
                                 <td>{{ cliente[4] }}</td>
+                                <td>{{ cliente[5] }}</td>
+                                <td>{{ cliente[6] }}</td>
+                                <td>{{ cliente[7] }}</td>
                                 <td>
-                                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editClienteModal{{ cliente[0] }}">Editar</button>
-                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteClienteModal{{ cliente[0] }}">Eliminar</button>
+                                    <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editClienteModal{{ cliente[0] }}">Editar</button>
+
+                                    <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteClienteModal{{ cliente[0] }}">Eliminar</button>
                                 </td>
                             </tr>
 
@@ -110,16 +143,28 @@
                                                     <input type="text" class="form-control" id="nombre" name="nombre" value="{{ cliente[1] }}">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="apellido">Apellido:</label>
-                                                    <input type="text" class="form-control" id="apellido" name="apellido" value="{{ cliente[2] }}">
+                                                    <label for="primer_apellido">Primer Apellido:</label>
+                                                    <input type="text" class="form-control" id="primer_apellido" name="primer_apellido" value="{{ cliente[2] }}">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="telefono">Número de Contacto:</label>
-                                                    <input type="text" class="form-control" id="telefono" name="telefono" value="{{ cliente[3] }}">
+                                                    <label for="segundo_apellido">Segundo Apellido:</label>
+                                                    <input type="text" class="form-control" id="segundo_apellido" name="segundo_apellido" value="{{ cliente[3] }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="numero">Número de Contacto:</label>
+                                                    <input type="text" class="form-control" id="numero" name="numero" value="{{ cliente[4] }}">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="correo">Correo Electrónico:</label>
-                                                    <input type="email" class="form-control" id="correo" name="correo" value="{{ cliente[4] }}">
+                                                    <input type="email" class="form-control" id="correo" name="correo" value="{{ cliente[5] }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="numero_factura">Número de Factura:</label>
+                                                    <input type="text" class="form-control" id="numero_factura" name="numero_factura" value="{{ cliente[6] }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="num_transaccion">Número de Transacción:</label>
+                                                    <input type="text" class="form-control" id="num_transaccion" name="num_transaccion" value="{{ cliente[7] }}">
                                                 </div>
                                                 <button type="submit" class="btn btn-primary">Guardar cambios</button>
                                             </form>
@@ -154,8 +199,6 @@
         </div>
     </div>
 </div>
-
-
 
 <!-- Footer -->    
 <footer>

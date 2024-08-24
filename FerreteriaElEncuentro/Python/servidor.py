@@ -1,12 +1,14 @@
-from flask import Flask, render_template, send_from_directory, request, redirect, url_for
+from flask import Flask, render_template, send_from_directory, request, redirect, url_for, flash
 import cx_Oracle
 import random
 
 app = Flask(
     __name__,
-    template_folder='C:\Users\Morgan\Documents\Lenguaje-de-BD\FerreteriaElEncuentro\HTML',
+    template_folder=r'C:\Users\Morgan\Documents\Lenguaje-de-BD\FerreteriaElEncuentro\HTML',
     static_folder=None
 )
+
+app.secret_key = '123456'
 
 cx_Oracle.init_oracle_client(lib_dir= r"C:\Users\Morgan\Documents\instantclient_23_4")
 
@@ -28,63 +30,97 @@ def index():
     return render_template("index.html")
 
 #####################Clientes#####################
-@app.route("/clientes", methods=['GET'])
-@app.route("/Clientes", methods=['GET'])
+@app.route("/clientes", methods=['GET', 'POST'])
+@app.route("/Clientes", methods=['GET', 'POST'])
 def clientes():
-    if request.method == 'POST':
-        codigo = request.form['codigo']
-        nombre = request.form['nombre']
-        apellido = request.form['apellido']
-        telefono = request.form['telefono']
-        correo = request.form['correo']
-
-        connection = get_db_connection()
-        cursor = connection.cursor()
-        cursor.execute(
-            "INSERT INTO CLIENTES (CODIGO, NOMBRE, APELLIDO, TELEFONO, CORREO) VALUES (:1, :2, :3, :4, :5)",
-            (codigo, nombre, apellido, telefono, correo)
-        )
-        connection.commit()
-        cursor.close()
-        connection.close()
-        return redirect(url_for('clientes'))
-
     connection = get_db_connection()
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM CLIENTES")
-    clientes = cursor.fetchall()
-    cursor.close()
-    connection.close()
+
+    if request.method == 'POST':
+        cod_cliente = request.form['cod_cliente']
+        nombre = request.form['nombre']
+        primer_apellido = request.form['primer_apellido']
+        segundo_apellido = request.form['segundo_apellido']
+        numero = request.form['numero']
+        correo = request.form['correo']
+        numero_factura = request.form['numero_factura']
+        num_transaccion = request.form['num_transaccion']
+
+        try:
+            cursor.execute(
+                "INSERT INTO CLIENTES (cod_cliente, Nombre, primerApellido, segundoApellido, Numero, Correo, numero_factura, num_transaccion) "
+                "VALUES (:1, :2, :3, :4, :5, :6, :7, :8)",
+                (cod_cliente, nombre, primer_apellido, segundo_apellido, numero, correo, numero_factura, num_transaccion)
+            )
+            connection.commit()
+            flash('Cliente registrado con éxito', 'success')
+        except cx_Oracle.IntegrityError:
+            flash('Número de factura o de transacción no encontrados', 'danger')
+        except Exception as e:
+            flash(f'Error al registrar el cliente: {str(e)}', 'danger')
+        return redirect(url_for('clientes'))
+
+    try:
+        cursor.execute("SELECT * FROM CLIENTES")
+        clientes = cursor.fetchall()
+        if not clientes:
+            flash('No se encontraron clientes en la base de datos.', 'warning')
+    except Exception as e:
+        flash(f'Error al obtener la lista de clientes: {str(e)}', 'danger')
+        clientes = []
+    finally:
+        cursor.close()
+        connection.close()
 
     return render_template("Clientes.html", clientes=clientes)
 
-@app.route("/clientes/edit/<codigo>", methods=['POST'])
-def edit_cliente(codigo):
+@app.route("/clientes/edit/<cod_cliente>", methods=['POST'])
+def edit_cliente(cod_cliente):
     nombre = request.form['nombre']
-    apellido = request.form['apellido']
-    telefono = request.form['telefono']
+    primer_apellido = request.form['primer_apellido']
+    segundo_apellido = request.form['segundo_apellido']
+    numero = request.form['numero']
     correo = request.form['correo']
+    numero_factura = request.form['numero_factura']
+    num_transaccion = request.form['num_transaccion']
 
     connection = get_db_connection()
     cursor = connection.cursor()
-    cursor.execute(
-        "UPDATE CLIENTES SET NOMBRE = :1, APELLIDO = :2, TELEFONO = :3, CORREO = :4 WHERE CODIGO = :5",
-        (nombre, apellido, telefono, correo, codigo)
-    )
-    connection.commit()
-    cursor.close()
-    connection.close()
+
+    try:
+        cursor.execute(
+            "UPDATE CLIENTES SET Nombre = :1, primerApellido = :2, segundoApellido = :3, Numero = :4, Correo = :5, "
+            "numero_factura = :6, num_transaccion = :7 WHERE cod_cliente = :8",
+            (nombre, primer_apellido, segundo_apellido, numero, correo, numero_factura, num_transaccion, cod_cliente)
+        )
+        connection.commit()
+        flash('Cliente actualizado con éxito', 'success')
+    except cx_Oracle.IntegrityError:
+        flash('Número de factura o de transacción no encontrados', 'danger')
+    except Exception as e:
+        flash(f'Error al actualizar el cliente: {str(e)}', 'danger')
+    finally:
+        cursor.close()
+        connection.close()
 
     return redirect(url_for('clientes'))
 
-@app.route("/clientes/delete/<codigo>", methods=['POST'])
-def delete_cliente(codigo):
+@app.route("/clientes/delete/<cod_cliente>", methods=['POST'])
+def delete_cliente(cod_cliente):
     connection = get_db_connection()
     cursor = connection.cursor()
-    cursor.execute("DELETE FROM CLIENTES WHERE CODIGO = :1", (codigo,))
-    connection.commit()
-    cursor.close()
-    connection.close()
+
+    try:
+        cursor.execute("DELETE FROM CLIENTES WHERE cod_cliente = :1", (cod_cliente,))
+        connection.commit()
+        flash('Cliente eliminado con éxito', 'success')
+    except cx_Oracle.IntegrityError:
+        flash('No se puede eliminar el cliente debido a una violación de restricción de integridad.', 'danger')
+    except Exception as e:
+        flash(f'Error al eliminar el cliente: {str(e)}', 'danger')
+    finally:
+        cursor.close()
+        connection.close()
 
     return redirect(url_for('clientes'))
 
@@ -224,31 +260,45 @@ def empleados():
     return render_template("Empleados.html")
 
 #####################Envios#####################
-@app.route("/envios", methods=['GET'])
-@app.route("/Envios", methods=['GET'])
+@app.route("/envios", methods=['GET', 'POST'])
+@app.route("/Envios", methods=['GET', 'POST'])
 def envios():
     if request.method == 'POST':
         codigo_envio = request.form['codigoEnvio']
         cliente = request.form['cliente']
         direccion = request.form['direccion']
-        fecha_envio_str = request.form['fechaEnvio']
-        estado = request.form['estado']
 
-        fecha_envio = datetime.strptime(fecha_envio_str, '%Y-%m-%d').date()
         connection = get_db_connection()
         cursor = connection.cursor()
-        cursor.execute(
-            "INSERT INTO ENVIOS (CODIGO_ENVIO, CLIENTE, DIRECCION, FECHA_ENVIO, ESTADO) VALUES (:1, :2, :3, :4, :5)",
-            (codigo_envio, cliente, direccion, fecha_envio, estado)
-        )
-        connection.commit()
-        cursor.close()
-        connection.close()
+        try:
+            # Insertar en la tabla Envios
+            cursor.execute(
+                "INSERT INTO Envios (numero_envio, Direccion) VALUES (:1, :2)",
+                (codigo_envio, direccion)
+            )
+            # Insertar en la tabla Envios_Clientes
+            cursor.execute(
+                "INSERT INTO Envios_Clientes (cod_cliente, numero_envio) VALUES (:1, :2)",
+                (cliente, codigo_envio)
+            )
+            connection.commit()
+            flash('Envío registrado con éxito', 'success')
+        except cx_Oracle.IntegrityError as e:
+            flash('El código de cliente no fue encontrado', 'danger')
+        except Exception as e:
+            flash('Error al registrar el envio: {}'.format(str(e)), 'danger')
+        finally:
+            cursor.close()
+            connection.close()
         return redirect(url_for('envios'))
 
     connection = get_db_connection()
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM ENVIOS")
+    cursor.execute("""
+        SELECT e.numero_envio, ec.cod_cliente, e.Direccion
+        FROM Envios e
+        JOIN Envios_Clientes ec ON e.numero_envio = ec.numero_envio
+    """)
     envios = cursor.fetchall()
     cursor.close()
     connection.close()
@@ -259,19 +309,29 @@ def envios():
 def edit_envio(codigo_envio):
     cliente = request.form['cliente']
     direccion = request.form['direccion']
-    fecha_envio_str = request.form['fechaEnvio']
-    estado = request.form['estado']
 
-    fecha_envio = datetime.strptime(fecha_envio_str, '%Y-%m-%d').date()
     connection = get_db_connection()
     cursor = connection.cursor()
-    cursor.execute(
-        "UPDATE ENVIOS SET CLIENTE = :1, DIRECCION = :2, FECHA_ENVIO = :3, ESTADO = :4 WHERE CODIGO_ENVIO = :5",
-        (cliente, direccion, fecha_envio, estado, codigo_envio)
-    )
-    connection.commit()
-    cursor.close()
-    connection.close()
+    try:
+        # Actualizar en la tabla Envios
+        cursor.execute(
+            "UPDATE Envios SET Direccion = :1 WHERE numero_envio = :2",
+            (direccion, codigo_envio)
+        )
+        # Actualizar en la tabla Envios_Clientes
+        cursor.execute(
+            "UPDATE Envios_Clientes SET cod_cliente = :1 WHERE numero_envio = :2",
+            (cliente, codigo_envio)
+        )
+        connection.commit()
+        flash('Envío actualizado con éxito', 'success')
+    except cx_Oracle.IntegrityError as e:
+        flash('El código de cliente no fue encontrado', 'danger')
+    except Exception as e:
+        flash('Error al registrar el envio: {}'.format(str(e)), 'danger')
+    finally:
+        cursor.close()
+        connection.close()
 
     return redirect(url_for('envios'))
 
@@ -279,10 +339,16 @@ def edit_envio(codigo_envio):
 def delete_envio(codigo_envio):
     connection = get_db_connection()
     cursor = connection.cursor()
-    cursor.execute("DELETE FROM ENVIOS WHERE CODIGO_ENVIO = :1", (codigo_envio,))
-    connection.commit()
-    cursor.close()
-    connection.close()
+    try:
+        cursor.execute("DELETE FROM Envios_Clientes WHERE numero_envio = :1", (codigo_envio,))
+        cursor.execute("DELETE FROM Envios WHERE numero_envio = :1", (codigo_envio,))
+        connection.commit()
+        flash('Envío eliminado con éxito', 'success')
+    except cx_Oracle.Error as e:
+        flash('Error al eliminar el envío', 'danger')
+    finally:
+        cursor.close()
+        connection.close()
 
     return redirect(url_for('envios'))
 
@@ -467,15 +533,15 @@ def ver_sucursales_eliminadas():
 #####################Recursos (CSS, JS, Recursos)#####################
 @app.route('/css/<path:path>')
 def send_css(path):
-    return send_from_directory('C:\Users\Morgan\Documents\Lenguaje-de-BD\FerreteriaElEncuentro\CSS', path)
+    return send_from_directory(r'C:\Users\Morgan\Documents\Lenguaje-de-BD\FerreteriaElEncuentro\CSS', path)
 
 @app.route('/js/<path:path>')
 def send_js(path):
-    return send_from_directory('C:\Users\Morgan\Documents\Lenguaje-de-BD\FerreteriaElEncuentro\JS', path)
+    return send_from_directory(r'C:\Users\Morgan\Documents\Lenguaje-de-BD\FerreteriaElEncuentro\JS', path)
 
 @app.route('/recursos/img/<path:path>')
 def send_img(path):
-    return send_from_directory('C:\Users\Morgan\Documents\Lenguaje-de-BD\FerreteriaElEncuentro\Recursos\img', path)
+    return send_from_directory(r'C:\Users\Morgan\Documents\Lenguaje-de-BD\FerreteriaElEncuentro\Recursos\img', path)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)
