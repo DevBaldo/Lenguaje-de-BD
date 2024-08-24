@@ -208,8 +208,8 @@ def vista_sucursal_descripcion():
     return render_template('vista_sucursal_descripcion.html', sucursales_descripcion=sucursales_descripcion)
 
 #####################Empleados#####################
-@app.route("/empleados", methods=['GET'])
-@app.route("/Empleados", methods=['GET'])
+@app.route("/empleados", methods=['GET', 'POST'])
+@app.route("/Empleados", methods=['GET', 'POST'])
 def empleados():
     if request.method == 'POST':
         cod_empleado = request.form['cod_empleado']
@@ -219,9 +219,80 @@ def empleados():
         correo = request.form['correo']
         numero = request.form['numero']
         departamento = request.form['departamento']
+
         print(f"Empleado registrado: {cod_empleado}, {nombre}, {primer_apellido}, {segundo_apellido}, {correo}, {numero}, {departamento}")
+
+        connection = get_db_connection()
+        cursor = connection.cursor()
+        cursor.callproc('insertar_empleado', [nombre, primer_apellido, segundo_apellido, correo, numero, departamento])
+        connection.commit()
+        cursor.close()
+        connection.close()
         return redirect(url_for('empleados'))
-    return render_template("Empleados.html")
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM Vista_Empleados")
+    empleados = cursor.fetchall()
+    cursor.close()
+    connection.close()
+
+    return render_template("Empleados.html", empleados=empleados)
+
+@app.route("/empleados/edit/<int:cod_empleado>", methods=['GET', 'POST'])
+def edit_empleado(cod_empleado):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    if request.method == 'GET':
+        cursor.callproc('obtener_empleado', [cod_empleado, cursor.var(cx_Oracle.STRING), cursor.var(cx_Oracle.STRING), cursor.var(cx_Oracle.STRING), cursor.var(cx_Oracle.STRING), cursor.var(cx_Oracle.STRING), cursor.var(cx_Oracle.NUMBER)])
+        empleado = cursor.fetchone()
+        cursor.close()
+        connection.close()
+        return render_template('edit_empleado.html', empleado=empleado)
+
+    elif request.method == 'POST':
+        nombre = request.form['nombre']
+        primer_apellido = request.form['primer_apellido']
+        segundo_apellido = request.form['segundo_apellido']
+        correo = request.form['correo']
+        numero = request.form['numero']
+        departamento = request.form['departamento']
+
+        print(f"Empleado actualizado: {cod_empleado}, {nombre}, {primer_apellido}, {segundo_apellido}, {correo}, {numero}, {departamento}")
+
+        connection = get_db_connection()
+        cursor = connection.cursor()
+        cursor.callproc('actualizar_empleado', [cod_empleado, nombre, primer_apellido, segundo_apellido, correo, numero, departamento])
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return redirect(url_for('empleados'))
+
+@app.route("/empleados/delete/<int:cod_empleado>", methods=['POST'])
+def delete_empleado(cod_empleado):
+    print(f"Empleado eliminado: {cod_empleado}")
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.callproc('eliminar_empleado', [cod_empleado])
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+    return redirect(url_for('empleados'))
+
+@app.route("/empleados/count")
+def count_employees():
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    count = cursor.callfunc('contar_empleados_func', cx_Oracle.NUMBER)
+    cursor.close()
+    connection.close()
+    return f"Total de empleados: {count}"
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 #####################Envios#####################
 @app.route("/envios", methods=['GET'])
@@ -357,16 +428,114 @@ def anadirproductos():
         return redirect(url_for('productos'))
 
 #####################Proveedores#####################
-@app.route("/proveedores", methods=['GET'])
-@app.route("/Proveedores", methods=['GET'])
+@app.route("/proveedores", methods=['GET', 'POST'])
+@app.route("/Proveedores", methods=['GET', 'POST'])
 def proveedores():
     if request.method == 'POST':
-        cod_proveedor = request.form['cod_proveedor']
+        CodProveedor  = request.form['CodProveedor ']
         nombre_proveedor = request.form['nombre_proveedor']
         producto_ventas = request.form['producto_ventas']
-        print(f"Proveedor registrado: {cod_proveedor}, {nombre_proveedor}, {producto_ventas}")
+        print(f"Proveedor registrado: {CodProveedor }, {nombre_proveedor}, {producto_ventas}")
+
+        connection = get_db_connection()
+        cursor = connection.cursor()
+        cursor.execute(
+            "INSERT INTO Proveedores (CodProveedor, nombre_proveedor, producto_ventas) VALUES (:1, :2, :3)",
+            (CodProveedor , nombre_proveedor, producto_ventas)
+        )
+        connection.commit()
+        cursor.close()
+        connection.close()
         return redirect(url_for('proveedores'))
-    return render_template("Proveedores.html")
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM Proveedores")
+    proveedores = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    return render_template("Proveedores.html", proveedores=proveedores)
+
+@app.route("/proveedores/edit/<CodProveedor >", methods=['POST'])
+def edit_proveedor(CodProveedor ):
+    nombre_proveedor = request.form['nombre_proveedor']
+    producto_ventas = request.form['producto_ventas']
+    print(f"Proveedor actualizado: {CodProveedor }, {nombre_proveedor}, {producto_ventas}")
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute(
+        "UPDATE Proveedores SET nombre_proveedor = :1, producto_ventas = :2 WHERE CodProveedor = :3",
+        (nombre_proveedor, producto_ventas, CodProveedor )
+    )
+    connection.commit()
+    cursor.close()
+    connection.close()
+    return redirect(url_for('proveedores'))
+
+@app.route("/proveedores/delete/<CodProveedor >", methods=['POST'])
+def delete_proveedor(CodProveedor ):
+    print(f"Proveedor eliminado: {CodProveedor }")
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute("DELETE FROM Proveedores WHERE CodProveedor = :1", (CodProveedor ,))
+    connection.commit()
+    cursor.close()
+    connection.close()
+    return redirect(url_for('proveedores'))
+
+@app.route('/verProveedoresEliminados')
+def ver_proveedores_eliminados():
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute("SELECT id_auditoria, CodProveedor, nombre_proveedor, producto_ventas, operacion, fecha FROM auditoria_proveedores ORDER BY fecha DESC")
+    proveedores_eliminados = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    return render_template('ver_proveedores_eliminados.html', proveedores=proveedores_eliminados)
+
+@app.route('/obtenerProveedoresPorProducto/<producto>', methods=['GET'])
+def obtener_proveedores_por_producto(producto):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute("SELECT CodProveedor, nombre_proveedor FROM vista_proveedores_por_producto WHERE producto_ventas = :1", (producto,))
+    proveedores = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    return render_template('proveedores_por_producto.html', proveedores=proveedores, producto=producto)
+
+@app.route('/obtenerNombreProveedor/<CodProveedor >', methods=['GET'])
+def obtener_nombre_proveedor(CodProveedor ):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.callproc('obtener_nombre_proveedor', [CodProveedor , cursor.var(cx_Oracle.STRING), cursor.var(cx_Oracle.STRING)])
+    nombre_proveedor = cursor.var(cx_Oracle.STRING).getvalue()
+    cursor.close()
+    connection.close()
+    return f'Nombre del proveedor: {nombre_proveedor}'
+
+@app.route('/obtenerProductoVentas/<CodProveedor >', methods=['GET'])
+def obtener_producto_ventas(CodProveedor ):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.callproc('obtener_producto_ventas', [CodProveedor , cursor.var(cx_Oracle.STRING)])
+    producto_ventas = cursor.var(cx_Oracle.STRING).getvalue()
+    cursor.close()
+    connection.close()
+    return f'Producto de ventas: {producto_ventas}'
+
+@app.route('/contarProveedores', methods=['GET'])
+def contar_proveedores():
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    count = cursor.callfunc('contar_proveedores_func', int)
+    cursor.close()
+    connection.close()
+    return f'Número de proveedores: {count}'
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 #####################Sucursales#####################
 @app.route("/sucursales", methods=['GET'])
