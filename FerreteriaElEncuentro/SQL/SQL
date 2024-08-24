@@ -1,8 +1,592 @@
-CREATE TABLE Proveedores (
-    CodProveedor INT PRIMARY KEY,
+/* P R O V E E D O R E S */
+
+CREATE TABLE Proveedores (CodProveedor INT PRIMARY KEY, nombre_proveedor VARCHAR2(100), producto_ventas VARCHAR2(100));
+
+-- insert into Proveedores (CodProveedor, nombre_proveedor, producto_ventas) VALUES (1, 'METALCO', 'Acero y productos metálicos');
+-- insert into Proveedores (CodProveedor, nombre_proveedor, producto_ventas) VALUES (2, 'Ferretería Maderas Camacho', 'Maderas y derivados');
+-- insert into Proveedores (CodProveedor, nombre_proveedor, producto_ventas) VALUES (3, 'Fernández Aguilar', 'Cerámicas y azulejos');
+-- insert into Proveedores (CodProveedor, nombre_proveedor, producto_ventas) VALUES (4, 'Lanco', 'Pinturas, selladores y barnices');
+-- insert into Proveedores (CodProveedor, nombre_proveedor, producto_ventas) VALUES (5, 'El Lagar', 'Herramientas manuales y eléctricas');
+-- insert into Proveedores (CodProveedor, nombre_proveedor, producto_ventas) VALUES (6, 'CEMPRO', 'Cemento y otros materiales de construcción');
+
+select * from Proveedores;
+------------------------------------------------------------------------------------------
+-- PROCEDIMIENTOS PROVEEDORES
+
+--inserta
+CREATE OR REPLACE PROCEDURE insertar_proveedor (
+    p_nombre_proveedor IN VARCHAR2,
+    p_producto_ventas IN VARCHAR2
+) AS
+BEGIN
+    INSERT INTO proveedores (nombre_proveedor, producto_ventas)
+    VALUES (p_nombre_proveedor, p_producto_ventas);
+END insertar_proveedor;
+
+--actualiza
+CREATE OR REPLACE PROCEDURE Actualizar_Proveedor (
+    p_CodProveedor IN INT,
+    p_nombre_proveedor IN VARCHAR2,
+    p_producto_ventas IN VARCHAR2
+) AS
+BEGIN
+    UPDATE Proveedores
+    SET nombre_proveedor = p_nombre_proveedor,
+        producto_ventas = p_producto_ventas
+    WHERE CodProveedor = p_CodProveedor;
+END;
+
+--elimina
+CREATE OR REPLACE PROCEDURE Eliminar_Proveedor (
+    p_CodProveedor IN INT
+) AS
+BEGIN
+    DELETE FROM Proveedores
+    WHERE CodProveedor = p_CodProveedor;
+END;
+
+--ver proveedores
+CREATE OR REPLACE PROCEDURE Obtener_Proveedor (
+    p_CodProveedor IN INT,
+    p_nombre_proveedor OUT VARCHAR2,
+    p_producto_ventas OUT VARCHAR2
+) AS
+BEGIN
+    SELECT nombre_proveedor, producto_ventas
+    INTO p_nombre_proveedor, p_producto_ventas
+    FROM proveedores
+    WHERE CodProveedor = p_CodProveedor;
+END obtener_proveedor;
+
+--contarlos
+CREATE OR REPLACE PROCEDURE obtener_proveedor (
+    p_CodProveedor IN INT,
+    p_nombre_proveedor OUT VARCHAR2,
+    p_producto_ventas OUT VARCHAR2
+) AS
+BEGIN
+    SELECT nombre_proveedor, producto_ventas
+    INTO p_nombre_proveedor, p_producto_ventas
+    FROM proveedores
+    WHERE CodProveedor = p_CodProveedor;
+END obtener_proveedor;
+------------------------------------------------------------------------------------------
+-- VISTAS PROVEEDORES
+
+--vista detalle
+CREATE OR REPLACE VIEW Vista_Proveedores AS
+SELECT CodProveedor, nombre_proveedor, producto_ventas
+FROM Proveedores;
+
+--proveedro x producto
+CREATE OR REPLACE VIEW vista_proveedores_por_producto AS
+SELECT producto_ventas, COUNT(*) AS num_proveedores
+FROM proveedores
+GROUP BY producto_ventas;
+------------------------------------------------------------------------------------------
+-- FUNCIONES PROVEEDORES
+
+--nombre proveedor
+CREATE OR REPLACE FUNCTION obtener_nombre_proveedor (
+    p_CodProveedor IN INT
+) RETURN VARCHAR2 AS
+    v_nombre_proveedor VARCHAR2(100);
+BEGIN
+    SELECT nombre_proveedor INTO v_nombre_proveedor
+    FROM proveedores
+    WHERE CodProveedor = p_CodProveedor;
+    RETURN v_nombre_proveedor;
+END obtener_nombre_proveedor;
+
+--obtiene productos
+CREATE OR REPLACE FUNCTION obtener_producto_ventas (
+    p_CodProveedor IN INT
+) RETURN VARCHAR2 AS
+    v_producto_ventas VARCHAR2(100);
+BEGIN
+    SELECT producto_ventas INTO v_producto_ventas
+    FROM proveedores
+    WHERE CodProveedor = p_CodProveedor;
+    RETURN v_producto_ventas;
+END obtener_producto_ventas;
+
+--cuenta proveedrores
+CREATE OR REPLACE FUNCTION contar_proveedores_func RETURN INT AS
+    v_count INT;
+BEGIN
+    SELECT COUNT(*) INTO v_count FROM proveedores;
+    RETURN v_count;
+END contar_proveedores_func;
+------------------------------------------------------------------------------------------
+-- PAQUETES PROVEEDORES
+--1
+CREATE OR REPLACE PACKAGE pkg_proveedores AS
+    PROCEDURE insertar_proveedor (
+        p_nombre_proveedor IN VARCHAR2,
+        p_producto_ventas IN VARCHAR2
+    );
+    PROCEDURE actualizar_proveedor (
+        p_CodProveedor IN INT,
+        p_nombre_proveedor IN VARCHAR2,
+        p_producto_ventas IN VARCHAR2
+    );
+    PROCEDURE eliminar_proveedor (
+        p_CodProveedor IN INT
+    );
+    FUNCTION contar_proveedores_func RETURN INT;
+END pkg_proveedores;
+
+
+--2
+CREATE OR REPLACE PACKAGE BODY pkg_proveedores AS
+    PROCEDURE insertar_proveedor (
+        p_nombre_proveedor IN VARCHAR2,
+        p_producto_ventas IN VARCHAR2
+    ) AS
+    BEGIN
+        INSERT INTO proveedores (nombre_proveedor, producto_ventas)
+        VALUES (p_nombre_proveedor, p_producto_ventas);
+    END insertar_proveedor;
+
+    PROCEDURE actualizar_proveedor (
+        p_CodProveedor IN INT,
+        p_nombre_proveedor IN VARCHAR2,
+        p_producto_ventas IN VARCHAR2
+    ) AS
+    BEGIN
+        UPDATE proveedores
+        SET nombre_proveedor = p_nombre_proveedor,
+            producto_ventas = p_producto_ventas
+        WHERE CodProveedor = p_CodProveedor;
+    END actualizar_proveedor;
+
+    PROCEDURE eliminar_proveedor (
+        p_CodProveedor IN INT
+    ) AS
+    BEGIN
+        DELETE FROM proveedores
+        WHERE CodProveedor = p_CodProveedor;
+    END eliminar_proveedor;
+
+    FUNCTION contar_proveedores_func RETURN INT AS
+        v_count INT;
+    BEGIN
+        SELECT COUNT(*) INTO v_count FROM proveedores;
+        RETURN v_count;
+    END contar_proveedores_func;
+END pkg_proveedores;
+------------------------------------------------------------------------------------------
+-- TRIGGER PROVEEDORES  ****pendiente****
+
+CREATE TABLE auditoria_proveedores (
+    id_auditoria INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    CodProveedor INT,
     nombre_proveedor VARCHAR2(100),
-    producto_ventas VARCHAR2(100)
+    producto_ventas VARCHAR2(100),
+    operacion VARCHAR2(10), -- 'INSERT' o 'UPDATE'
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE OR REPLACE TRIGGER trg_audit_proveedores_insert
+AFTER INSERT ON proveedores
+FOR EACH ROW
+BEGIN
+    INSERT INTO auditoria_proveedores (CodProveedor, nombre_proveedor, producto_ventas, operacion, fecha)
+    VALUES (:NEW.CodProveedor, :NEW.nombre_proveedor, :NEW.producto_ventas, 'INSERT', SYSDATE);
+END;
+
+
+------------------------------------------------------------------------------------------
+-- CURSORES PROVEEDORES
+
+--obtiene proveedores
+DECLARE
+    CURSOR c_proveedores IS
+        SELECT CodProveedor, nombre_proveedor, producto_ventas
+        FROM proveedores;
+        
+    v_proveedor proveedores%ROWTYPE;
+BEGIN
+    OPEN c_proveedores;
+    LOOP
+        FETCH c_proveedores INTO v_proveedor;
+        EXIT WHEN c_proveedores%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE(v_proveedor.CodProveedor || ' - ' || v_proveedor.nombre_proveedor);
+    END LOOP;
+    CLOSE c_proveedores;
+END;
+
+--los obtiene por productos
+DECLARE
+    CURSOR c_proveedores_por_producto (p_producto IN VARCHAR2) IS
+        SELECT CodProveedor, nombre_proveedor
+        FROM proveedores
+        WHERE producto_ventas = p_producto;
+        
+    v_CodProveedor proveedores.CodProveedor%TYPE;
+    v_nombre_proveedor proveedores.nombre_proveedor%TYPE;
+BEGIN
+   OPEN c_proveedores_por_producto('Herramientas');
+    LOOP
+        FETCH c_proveedores_por_producto INTO v_CodProveedor, v_nombre_proveedor;
+        EXIT WHEN c_proveedores_por_producto%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE(v_CodProveedor || ' - ' || v_nombre_proveedor);
+    END LOOP;
+    CLOSE c_proveedores_por_producto;
+END;
+
+--los obtiene por nombre
+DECLARE
+    CURSOR c_proveedores_por_nombre (p_nombre IN VARCHAR2) IS
+        SELECT CodProveedor, nombre_proveedor
+        FROM proveedores
+        WHERE nombre_proveedor LIKE '%' || p_nombre || '%';
+        
+    v_CodProveedor proveedores.CodProveedor%TYPE;
+    v_nombre_proveedor proveedores.nombre_proveedor%TYPE;
+BEGIN
+    OPEN c_proveedores_por_nombre('ABC');
+    LOOP
+        FETCH c_proveedores_por_nombre INTO v_CodProveedor, v_nombre_proveedor;
+        EXIT WHEN c_proveedores_por_nombre%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE(v_CodProveedor || ' - ' || v_nombre_proveedor);
+    END LOOP;
+    CLOSE c_proveedores_por_nombre;
+END;
+-------------------------------------------------------------------------------------
+/* E M P L E A D O S */
+
+CREATE TABLE Empleados (
+    cod_empleado INT PRIMARY KEY,
+    nombre VARCHAR2(100),
+    primer_apellido VARCHAR2(100),
+    segundo_apellido VARCHAR2(100),
+    correo VARCHAR2(100),
+    numero VARCHAR2(20),
+    departamento INT,
+    FOREIGN KEY (departamento) REFERENCES Departamentos(cod_departamento)
+);
+
+--insert into Empleados (cod_empleado,nombre,primer_apellido,segundo_apellido,correo,numero,departamento) VALUES (1, 'Javier', 'Madrigal', 'Pozo', 'jmadrigal@elencuentro.com', '1234-5555', 1);
+--insert into Empleados (cod_empleado,nombre,primer_apellido,segundo_apellido,correo,numero,departamento) VALUES (2, 'Camila', 'Corrales', 'Roca', 'ccorrales@elencuentro.com', '1234-5556', 2);
+--insert into Empleados (cod_empleado,nombre,primer_apellido,correo,numero,departamento) VALUES (3, 'Morgan', 'Baldo', 'mbaldo@elencuentro.com', '1234-5557', 3);
+--insert into Empleados (cod_empleado,nombre,primer_apellido,segundo_apellido,correo,numero,departamento) VALUES (4, 'Jefferty', 'Rodriguez', 'Vargas', 'jrodriguez@elencuentro.com', '1234-5558', 1);
+--insert into Empleados (cod_empleado,nombre,primer_apellido,segundo_apellido,correo,numero,departamento) VALUES (5, 'Jessica', 'Marin', 'Cespedes', 'jmarin@elencuentro.com', '1234-5559', 2);
+
+select * from Empleados;
+------------------------------------------------------------------------------------------
+-- PROCEDIMIENTOS EMPLEADOS
+
+--insertar
+CREATE OR REPLACE PROCEDURE insertar_empleado (
+    p_nombre IN VARCHAR2,
+    p_primer_apellido IN VARCHAR2,
+    p_segundo_apellido IN VARCHAR2,
+    p_correo IN VARCHAR2,
+    p_numero IN VARCHAR2,
+    p_departamento IN INT
+) AS
+BEGIN
+    INSERT INTO empleados (nombre, primer_apellido, segundo_apellido, correo, numero, departamento)
+    VALUES (p_nombre, p_primer_apellido, p_segundo_apellido, p_correo, p_numero, p_departamento);
+END insertar_empleado;
+
+--actualiza
+CREATE OR REPLACE PROCEDURE actualizar_empleado (
+    p_cod_empleado IN INT,
+    p_nombre IN VARCHAR2,
+    p_primer_apellido IN VARCHAR2,
+    p_segundo_apellido IN VARCHAR2,
+    p_correo IN VARCHAR2,
+    p_numero IN VARCHAR2,
+    p_departamento IN INT
+) AS
+BEGIN
+    UPDATE empleados
+    SET nombre = p_nombre,
+        primer_apellido = p_primer_apellido,
+        segundo_apellido = p_segundo_apellido,
+        correo = p_correo,
+        numero = p_numero,
+        departamento = p_departamento
+    WHERE cod_empleado = p_cod_empleado;
+END actualizar_empleado;
+
+--elimina 
+CREATE OR REPLACE PROCEDURE eliminar_empleado (
+    p_cod_empleado IN INT
+) AS
+BEGIN
+    DELETE FROM empleados
+    WHERE cod_empleado = p_cod_empleado;
+END eliminar_empleado;
+
+-- ver empleados
+CREATE OR REPLACE PROCEDURE obtener_empleado (
+    p_cod_empleado IN INT,
+    p_nombre OUT VARCHAR2,
+    p_primer_apellido OUT VARCHAR2,
+    p_segundo_apellido OUT VARCHAR2,
+    p_correo OUT VARCHAR2,
+    p_numero OUT VARCHAR2,
+    p_departamento OUT INT
+) AS
+BEGIN
+    SELECT nombre, primer_apellido, segundo_apellido, correo, numero, departamento
+    INTO p_nombre, p_primer_apellido, p_segundo_apellido, p_correo, p_numero, p_departamento
+    FROM empleados
+    WHERE cod_empleado = p_cod_empleado;
+END obtener_empleado;
+
+--cuenta empleados
+CREATE OR REPLACE PROCEDURE contar_empleados (
+    p_count OUT INT
+) AS
+BEGIN
+    SELECT COUNT(*) INTO p_count FROM empleados;
+END contar_empleados;
+------------------------------------------------------------------------------------------
+-- VISTAS EMPLEADOS
+
+--vista detalles
+CREATE OR REPLACE VIEW Vista_Empleados AS
+SELECT cod_empleado, nombre, primer_apellido, segundo_apellido, correo, numero, departamento
+FROM Empleados;
+
+--empleados x departamento
+CREATE OR REPLACE VIEW vista_empleados_por_departamento AS
+SELECT departamento, COUNT(*) AS num_empleados
+FROM empleados
+GROUP BY departamento;
+------------------------------------------------------------------------------------------
+-- FUNCIONES EMPLEADOS
+
+--nombre empleado
+CREATE OR REPLACE FUNCTION obtener_nombre_empleado (
+    p_cod_empleado IN INT
+) RETURN VARCHAR2 AS
+    v_nombre_empleado VARCHAR2(100);
+BEGIN
+    SELECT nombre INTO v_nombre_empleado
+    FROM empleados
+    WHERE cod_empleado = p_cod_empleado;
+    RETURN v_nombre_empleado;
+END obtener_nombre_empleado;
+
+--correos de empleados
+CREATE OR REPLACE FUNCTION obtener_correo_empleado (
+    p_cod_empleado IN INT
+) RETURN VARCHAR2 AS
+    v_correo_empleado VARCHAR2(100);
+BEGIN
+    SELECT correo INTO v_correo_empleado
+    FROM empleados
+    WHERE cod_empleado = p_cod_empleado;
+    RETURN v_correo_empleado;
+END obtener_correo_empleado;
+
+--conteo empleados
+CREATE OR REPLACE FUNCTION contar_empleados_func RETURN INT AS
+    v_count INT;
+BEGIN
+    SELECT COUNT(*) INTO v_count FROM empleados;
+    RETURN v_count;
+END contar_empleados_func;
+------------------------------------------------------------------------------------------
+-- PAQUETES EMPLEADOS
+
+--1 
+CREATE OR REPLACE PACKAGE pkg_empleados AS
+    PROCEDURE insertar_empleado (
+        p_nombre IN VARCHAR2,
+        p_primer_apellido IN VARCHAR2,
+        p_segundo_apellido IN VARCHAR2,
+        p_correo IN VARCHAR2,
+        p_numero IN VARCHAR2,
+        p_departamento IN INT
+    );
+    PROCEDURE actualizar_empleado (
+        p_cod_empleado IN INT,
+        p_nombre IN VARCHAR2,
+        p_primer_apellido IN VARCHAR2,
+        p_segundo_apellido IN VARCHAR2,
+        p_correo IN VARCHAR2,
+        p_numero IN VARCHAR2,
+        p_departamento IN INT
+    );
+    PROCEDURE eliminar_empleado (
+        p_cod_empleado IN INT
+    );
+    FUNCTION contar_empleados_func RETURN INT;
+END pkg_empleados;
+***
+CREATE OR REPLACE PACKAGE BODY pkg_empleados AS
+    PROCEDURE insertar_empleado (
+        p_nombre IN VARCHAR2,
+        p_primer_apellido IN VARCHAR2,
+        p_segundo_apellido IN VARCHAR2,
+        p_correo IN VARCHAR2,
+        p_numero IN VARCHAR2,
+        p_departamento IN INT
+    ) AS
+    BEGIN
+        INSERT INTO empleados (nombre, primer_apellido, segundo_apellido, correo, numero, departamento)
+        VALUES (p_nombre, p_primer_apellido, p_segundo_apellido, p_correo, p_numero, p_departamento);
+    END insertar_empleado;
+
+    PROCEDURE actualizar_empleado (
+        p_cod_empleado IN INT,
+        p_nombre IN VARCHAR2,
+        p_primer_apellido IN VARCHAR2,
+        p_segundo_apellido IN VARCHAR2,
+        p_correo IN VARCHAR2,
+        p_numero IN VARCHAR2,
+        p_departamento IN INT
+    ) AS
+    BEGIN
+        UPDATE empleados
+        SET nombre = p_nombre,
+            primer_apellido = p_primer_apellido,
+            segundo_apellido = p_segundo_apellido,
+            correo = p_correo,
+            numero = p_numero,
+            departamento = p_departamento
+        WHERE cod_empleado = p_cod_empleado;
+    END actualizar_empleado;
+
+    PROCEDURE eliminar_empleado (
+        p_cod_empleado IN INT
+    ) AS
+    BEGIN
+        DELETE FROM empleados
+        WHERE cod_empleado = p_cod_empleado;
+    END eliminar_empleado;
+
+    FUNCTION contar_empleados_func RETURN INT AS
+        v_count INT;
+    BEGIN
+        SELECT COUNT(*) INTO v_count FROM empleados;
+        RETURN v_count;
+    END contar_empleados_func;
+END pkg_empleados;
+
+--2
+CREATE OR REPLACE PACKAGE pkg_empleados_consultas AS
+    FUNCTION obtener_nombre_empleado (
+        p_cod_empleado IN INT
+    ) RETURN VARCHAR2;
+    FUNCTION obtener_correo_empleado (
+        p_cod_empleado IN INT
+    ) RETURN VARCHAR2;
+END pkg_empleados_consultas;
+***
+CREATE OR REPLACE PACKAGE BODY pkg_empleados_consultas AS
+    FUNCTION obtener_nombre_empleado (
+        p_cod_empleado IN INT
+    ) RETURN VARCHAR2 AS
+        v_nombre_empleado VARCHAR2(100);
+    BEGIN
+        SELECT nombre INTO v_nombre_empleado
+        FROM empleados
+        WHERE cod_empleado = p_cod_empleado;
+        RETURN v_nombre_empleado;
+    END obtener_nombre_empleado;
+
+    FUNCTION obtener_correo_empleado (
+        p_cod_empleado IN INT
+    ) RETURN VARCHAR2 AS
+        v_correo_empleado VARCHAR2(100);
+    BEGIN
+        SELECT correo INTO v_correo_empleado
+        FROM empleados
+        WHERE cod_empleado = p_cod_empleado;
+        RETURN v_correo_empleado;
+    END obtener_correo_empleado;
+END pkg_empleados_consultas;
+------------------------------------------------------------------------------------------
+-- TRIGGER EMPLEADOS
+
+CREATE TABLE auditoria_empleados (
+    id_auditoria INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    cod_empleado INT,
+    operacion VARCHAR2(10), -- 'INSERT', 'UPDATE', 'DELETE'
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    old_nombre VARCHAR2(100),
+    new_nombre VARCHAR2(100)
+);
+
+CREATE OR REPLACE TRIGGER trg_audit_empleados_update
+AFTER UPDATE ON empleados
+FOR EACH ROW
+BEGIN
+    INSERT INTO auditoria_empleados (cod_empleado, operacion, fecha, old_nombre, new_nombre)
+    VALUES (:NEW.cod_empleado, 'UPDATE', SYSDATE, :OLD.nombre, :NEW.nombre);
+END;
+------------------------------------------------------------------------------------------
+-- CURSORES EMPLEADOS
+
+--obtinene los empleados
+DECLARE
+    CURSOR c_empleados IS
+        SELECT cod_empleado, nombre, primer_apellido, segundo_apellido
+        FROM empleados;
+        
+    v_empleado c_empleados%ROWTYPE;
+BEGIN
+    OPEN c_empleados;
+    LOOP
+        FETCH c_empleados INTO v_empleado;
+        EXIT WHEN c_empleados%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE(v_empleado.cod_empleado || ' - ' || v_empleado.nombre || ' - ' || v_empleado.primer_apellido || ' - ' || v_empleado.segundo_apellido);
+    END LOOP;
+    CLOSE c_empleados;
+END;
+
+--empleados por correo
+DECLARE
+    CURSOR c_empleados_por_correo (p_correo IN VARCHAR2) IS
+        SELECT cod_empleado, nombre
+        FROM empleados
+        WHERE correo = p_correo;
+        
+    TYPE t_empleado_rec IS RECORD (
+        cod_empleado empleados.cod_empleado%TYPE,
+        nombre empleados.nombre%TYPE
+    );
+
+    v_empleado t_empleado_rec;
+BEGIN
+    OPEN c_empleados_por_correo('test@example.com');
+    LOOP
+        FETCH c_empleados_por_correo INTO v_empleado;
+        EXIT WHEN c_empleados_por_correo%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE(v_empleado.cod_empleado || ' - ' || v_empleado.nombre);
+    END LOOP;
+    CLOSE c_empleados_por_correo;
+END;
+
+--empleados por departamento
+DECLARE
+    CURSOR c_empleados_por_departamento (p_departamento IN INT) IS
+        SELECT cod_empleado, nombre
+        FROM empleados
+        WHERE departamento = p_departamento;
+    TYPE t_empleado_rec IS RECORD (
+        cod_empleado empleados.cod_empleado%TYPE,
+        nombre empleados.nombre%TYPE
+    );
+    v_empleado t_empleado_rec;
+BEGIN
+    OPEN c_empleados_por_departamento(10);
+    LOOP
+        FETCH c_empleados_por_departamento INTO v_empleado;
+        EXIT WHEN c_empleados_por_departamento%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE(v_empleado.cod_empleado || ' - ' || v_empleado.nombre);
+    END LOOP;
+    CLOSE c_empleados_por_departamento;
+END;
+----------------------------------------------------------------------------------------------------------------------------------------
+
 
 -- Table: Sucursal
 CREATE TABLE Sucursal (
@@ -20,6 +604,11 @@ CREATE TABLE Proveedores_Sucursal (
     FOREIGN KEY (cod_sucursal) REFERENCES Sucursal(cod_sucursal)
 );
 
+/*
+HAY QUE INSERTAR LOS DATOS EN SUCURSALES Y RELACIONAR proveedores/sucursales
+EJEMPLO: insert into proveedores_sucursal (cod_proveedor, cod_sucursal) values (1, 1);
+*/
+
 -- Table: Departamentos
 CREATE TABLE Departamentos (
     cod_departamento INT PRIMARY KEY,
@@ -31,21 +620,7 @@ CREATE TABLE Departamentos (
 -- INSERT INTO Departamentos(cod_departamento,nombre_departamento,descrip_departamento) VALUES(2,'Departamento de Cobros', 'Responsable de gestionar los cobros.');
 -- INSERT INTO Departamentos(cod_departamento,nombre_departamento,descrip_departamento) VALUES(3,'Departamento de Recursos Huamnos', 'Responsable de gestionar los recursos humanos de la empresa');
 
-
 select * from Departamentos;
-
-
--- Table: Empleados
-CREATE TABLE Empleados (
-    cod_empleado INT PRIMARY KEY,
-    nombre VARCHAR2(100),
-    primer_apellido VARCHAR2(100),
-    segundo_apellido VARCHAR2(100),
-    correo VARCHAR2(100),
-    numero VARCHAR2(20),
-    departamento INT,
-    FOREIGN KEY (departamento) REFERENCES Departamentos(cod_departamento)
-);
 
 -- Table: Sucursal_Departamentos
 CREATE TABLE Sucursal_Departamentos (
@@ -129,7 +704,6 @@ CREATE TABLE Envios_Clientes (
 CREATE TABLE Forma_Pago (
     num_transaccion INT PRIMARY KEY,
     forma_pago VARCHAR2(50)
-    FOREIGN KEY (num_transaccion) REFERENCES Pagos(num_transaccion)
 );
 
 --Procedimiento para insertar una nueva sucursal
@@ -260,18 +834,69 @@ BEGIN
     );
 END;
 
---vista sucursal
-CREATE OR REPLACE VIEW Sucursal_Departamentos_View AS
-SELECT Sucursal.cod_sucursal, 
-       Sucursal.Correo, 
-       Sucursal.Direccion, 
-       Sucursal.Telefono, 
-       Departamentos.cod_departamento, 
-       Departamentos.nombre_departamento, 
-       Departamentos.descrip_departamento
-FROM Sucursal
-JOIN Sucursal_Departamentos ON Sucursal.cod_sucursal = Sucursal_Departamentos.cod_sucursal
-JOIN Departamentos ON Sucursal_Departamentos.cod_departamento = Departamentos.cod_departamento;
+--vista Sucursal_Departamentos
+CREATE OR REPLACE VIEW VISTA_SUCURSAL_DEPARTAMENTOS AS
+SELECT 
+    sd.cod_sucursal,
+    s.Correo,
+    s.Direccion,
+    s.Telefono,
+    sd.cod_departamento,
+    d.nombre_departamento,
+    d.descrip_departamento
+FROM 
+    Sucursal_Departamentos sd
+JOIN 
+    Sucursal s ON sd.cod_sucursal = s.cod_sucursal
+JOIN 
+    Departamentos d ON sd.cod_departamento = d.cod_departamento;
+
+--funcion que devuelve un cursor 
+CREATE OR REPLACE FUNCTION FN_VISTA_SUCURSAL_DEPARTAMENTOS
+RETURN SYS_REFCURSOR
+AS
+    p_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN p_cursor FOR
+        SELECT * FROM VISTA_SUCURSAL_DEPARTAMENTOS;
+    
+    RETURN p_cursor;
+END FN_VISTA_SUCURSAL_DEPARTAMENTOS;
+/
+
+----Vista sucursal
+CREATE OR REPLACE FUNCTION FN_DESCRIPCION_SUCURSAL(
+    p_cod_sucursal IN Sucursal.cod_sucursal%TYPE
+) RETURN VARCHAR2 AS
+    v_descripcion VARCHAR2(255);
+BEGIN
+    -- Creamos una descripci n personalizada basada en el c digo de la sucursal
+    SELECT 'La sucursal ' || Correo || ' ubicada en ' || Direccion
+    INTO v_descripcion
+    FROM Sucursal
+    WHERE cod_sucursal = p_cod_sucursal;
+    
+    -- Devolvemos la descripci n
+    RETURN v_descripcion;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 'Descripci n no disponible';
+    WHEN OTHERS THEN
+        RETURN 'Error al generar la descripci n';
+END FN_DESCRIPCION_SUCURSAL;
+
+CREATE OR REPLACE VIEW VISTA_SUCURSAL_DESCRIPCION AS
+SELECT 
+    cod_sucursal AS Codigo_Sucursal,
+    Correo AS Correo_Sucursal,
+    Direccion AS Direccion_Sucursal,
+    Telefono AS Telefono_Sucursal,
+    FN_DESCRIPCION_SUCURSAL(cod_sucursal) AS Descripcion_Sucursal
+FROM 
+    Sucursal;
+
+SELECT * FROM VISTA_SUCURSAL_DESCRIPCION;
+
 
 
 --vista proveedores
@@ -365,96 +990,6 @@ ORDER BY
 
 
 -----------------------------------------------------------------------------------------------
---Procedimientos Proveedor
---Inserta
-
-CREATE OR REPLACE PROCEDURE Insertar_Proveedor (
-    p_CodProveedor IN INT,
-    p_nombre_proveedor IN VARCHAR2,
-    p_producto_ventas IN VARCHAR2
-) AS
-BEGIN
-    INSERT INTO Proveedores (CodProveedor, nombre_proveedor, producto_ventas)
-    VALUES (p_CodProveedor, p_nombre_proveedor, p_producto_ventas);
-END;
-
---actualiza
-
-CREATE OR REPLACE PROCEDURE Actualizar_Proveedor (
-    p_CodProveedor IN INT,
-    p_nombre_proveedor IN VARCHAR2,
-    p_producto_ventas IN VARCHAR2
-) AS
-BEGIN
-    UPDATE Proveedores
-    SET nombre_proveedor = p_nombre_proveedor,
-        producto_ventas = p_producto_ventas
-    WHERE CodProveedor = p_CodProveedor;
-END;
-
---elimina
-
-CREATE OR REPLACE PROCEDURE Eliminar_Proveedor (
-    p_CodProveedor IN INT
-) AS
-BEGIN
-    DELETE FROM Proveedores
-    WHERE CodProveedor = p_CodProveedor;
-END;
-
---Procedimientos Empleados
-
---insertar
-CREATE OR REPLACE PROCEDURE Insertar_Empleado (
-    p_cod_empleado IN INT,
-    p_nombre IN VARCHAR2,
-    p_primer_apellido IN VARCHAR2,
-    p_segundo_apellido IN VARCHAR2,
-    p_correo IN VARCHAR2,
-    p_numero IN VARCHAR2,
-    p_departamento IN INT
-) AS
-BEGIN
-    INSERT INTO Empleados (cod_empleado, nombre, primer_apellido, segundo_apellido, correo, numero, departamento)
-    VALUES (p_cod_empleado, p_nombre, p_primer_apellido, p_segundo_apellido, p_correo, p_numero, p_departamento);
-END;
-
-
---actualizar
-
-CREATE OR REPLACE PROCEDURE Actualizar_Empleado (
-    p_cod_empleado IN INT,
-    p_nombre IN VARCHAR2,
-    p_primer_apellido IN VARCHAR2,
-    p_segundo_apellido IN VARCHAR2,
-    p_correo IN VARCHAR2,
-    p_numero IN VARCHAR2,
-    p_departamento IN INT
-) AS
-BEGIN
-    UPDATE Empleados
-    SET nombre = p_nombre,
-        primer_apellido = p_primer_apellido,
-        segundo_apellido = p_segundo_apellido,
-        correo = p_correo,
-        numero = p_numero,
-        departamento = p_departamento
-    WHERE cod_empleado = p_cod_empleado;
-END;
-
---Vistas proveedores
-
-CREATE OR REPLACE VIEW Vista_Proveedores AS
-SELECT CodProveedor, nombre_proveedor, producto_ventas
-FROM Proveedores;
-
-
---vistas empleados
-
-CREATE OR REPLACE VIEW Vista_Empleados AS
-SELECT cod_empleado, nombre, primer_apellido, segundo_apellido, correo, numero, departamento
-FROM Empleados;
-
 --Agregar cliente
 CREATE OR REPLACE PROCEDURE insertar_cliente(
     p_cod_cliente IN CLIENTES.cod_cliente%TYPE,
@@ -476,7 +1011,8 @@ END insertar_cliente;
 
 
 
---Actualizar cliente
+--Actualizar cliente  *****************************************************DECLARAR EL CODIGO **************************************************!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 CREATE OR REPLACE PROCEDURE actualizar_cliente(
     p_codigo IN CLIENTES.CODIGO%TYPE,
     p_nombre IN CLIENTES.NOMBRE%TYPE,
