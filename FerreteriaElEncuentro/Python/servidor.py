@@ -212,7 +212,6 @@ def vista_sucursal_descripcion():
 @app.route("/Empleados", methods=['GET', 'POST'])
 def empleados():
     if request.method == 'POST':
-        cod_empleado = request.form['cod_empleado']
         nombre = request.form['nombre']
         primer_apellido = request.form['primer_apellido']
         segundo_apellido = request.form['segundo_apellido']
@@ -220,14 +219,22 @@ def empleados():
         numero = request.form['numero']
         departamento = request.form['departamento']
 
-        print(f"Empleado registrado: {cod_empleado}, {nombre}, {primer_apellido}, {segundo_apellido}, {correo}, {numero}, {departamento}")
+        print(f"Empleado registrado: {nombre}, {primer_apellido}, {segundo_apellido}, {correo}, {numero}, {departamento}")
 
         connection = get_db_connection()
         cursor = connection.cursor()
-        cursor.callproc('insertar_empleado', [nombre, primer_apellido, segundo_apellido, correo, numero, departamento])
-        connection.commit()
-        cursor.close()
-        connection.close()
+        try:
+            # Llamar al procedimiento para insertar un empleado
+            cursor.callproc('insertar_empleado', [nombre, primer_apellido, segundo_apellido, correo, numero, departamento])
+            connection.commit()
+        except cx_Oracle.DatabaseError as e:
+            error, = e.args
+            print(f"Error al insertar empleado: {error.message}")
+            connection.rollback()
+        finally:
+            cursor.close()
+            connection.close()
+        
         return redirect(url_for('empleados'))
 
     connection = get_db_connection()
@@ -245,7 +252,8 @@ def edit_empleado(cod_empleado):
     cursor = connection.cursor()
 
     if request.method == 'GET':
-        cursor.callproc('obtener_empleado', [cod_empleado, cursor.var(cx_Oracle.STRING), cursor.var(cx_Oracle.STRING), cursor.var(cx_Oracle.STRING), cursor.var(cx_Oracle.STRING), cursor.var(cx_Oracle.STRING), cursor.var(cx_Oracle.NUMBER)])
+        # Llamar al procedimiento  de los datos del empleado
+        cursor.execute("SELECT nombre, primer_apellido, segundo_apellido, correo, numero, departamento FROM Vista_Empleados WHERE cod_empleado = :1", (cod_empleado,))
         empleado = cursor.fetchone()
         cursor.close()
         connection.close()
@@ -261,12 +269,18 @@ def edit_empleado(cod_empleado):
 
         print(f"Empleado actualizado: {cod_empleado}, {nombre}, {primer_apellido}, {segundo_apellido}, {correo}, {numero}, {departamento}")
 
-        connection = get_db_connection()
-        cursor = connection.cursor()
-        cursor.callproc('actualizar_empleado', [cod_empleado, nombre, primer_apellido, segundo_apellido, correo, numero, departamento])
-        connection.commit()
-        cursor.close()
-        connection.close()
+        try:
+            # Llamar al procedimiento ara actualizar un empleado
+            cursor.callproc('actualizar_empleado', [cod_empleado, nombre, primer_apellido, segundo_apellido, correo, numero, departamento])
+            connection.commit()
+        except cx_Oracle.DatabaseError as e:
+            error, = e.args
+            print(f"Error al actualizar empleado: {error.message}")
+            connection.rollback()
+        finally:
+            cursor.close()
+            connection.close()
+
         return redirect(url_for('empleados'))
 
 @app.route("/empleados/delete/<int:cod_empleado>", methods=['POST'])
@@ -275,24 +289,19 @@ def delete_empleado(cod_empleado):
 
     connection = get_db_connection()
     cursor = connection.cursor()
-    cursor.callproc('eliminar_empleado', [cod_empleado])
-    connection.commit()
-    cursor.close()
-    connection.close()
+    try:
+        # Llamar al procedimiento para eliminar un empleado
+        cursor.callproc('eliminar_empleado', [cod_empleado])
+        connection.commit()
+    except cx_Oracle.DatabaseError as e:
+        error, = e.args
+        print(f"Error al eliminar empleado: {error.message}")
+        connection.rollback()
+    finally:
+        cursor.close()
+        connection.close()
 
     return redirect(url_for('empleados'))
-
-@app.route("/empleados/count")
-def count_employees():
-    connection = get_db_connection()
-    cursor = connection.cursor()
-    count = cursor.callfunc('contar_empleados_func', cx_Oracle.NUMBER)
-    cursor.close()
-    connection.close()
-    return f"Total de empleados: {count}"
-
-if __name__ == '__main__':
-    app.run(debug=True)
 
 #####################Envios#####################
 @app.route("/envios", methods=['GET'])

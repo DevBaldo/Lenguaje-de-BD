@@ -35,31 +35,31 @@
         <form action="/empleados" method="post" class="mb-4">
             <div class="mb-3">
                 <label for="cod_empleado" class="form-label">Código de Empleado:</label>
-                <input type="text" id="cod_empleado" name="cod_empleado" class="form-control">
+                <input type="text" id="cod_empleado" name="cod_empleado" class="form-control" required>
             </div>
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" class="form-control">
+                <input type="text" id="nombre" name="nombre" class="form-control" required>
             </div>
             <div class="mb-3">
                 <label for="primer_apellido" class="form-label">Primer Apellido:</label>
-                <input type="text" id="primer_apellido" name="primer_apellido" class="form-control">
+                <input type="text" id="primer_apellido" name="primer_apellido" class="form-control" required>
             </div>
             <div class="mb-3">
                 <label for="segundo_apellido" class="form-label">Segundo Apellido:</label>
-                <input type="text" id="segundo_apellido" name="segundo_apellido" class="form-control">
+                <input type="text" id="segundo_apellido" name="segundo_apellido" class="form-control" required>
             </div>
             <div class="mb-3">
                 <label for="correo" class="form-label">Correo:</label>
-                <input type="email" id="correo" name="correo" class="form-control">
+                <input type="email" id="correo" name="correo" class="form-control" required>
             </div>
             <div class="mb-3">
                 <label for="numero" class="form-label">Número:</label>
-                <input type="text" id="numero" name="numero" class="form-control">
+                <input type="text" id="numero" name="numero" class="form-control" required>
             </div>
             <div class="mb-3">
                 <label for="departamento" class="form-label">Departamento:</label>
-                <input type="text" id="departamento" name="departamento" class="form-control">
+                <input type="text" id="departamento" name="departamento" class="form-control" required>
             </div>
             <button type="submit" class="btn btn-primary">Registrar</button>
         </form>
@@ -68,9 +68,32 @@
         <form action="/empleados/editar" method="post" class="mb-4">
             <div class="mb-3">
                 <label for="cod_empleado_edit" class="form-label">Código de Empleado:</label>
-                <input type="text" id="cod_empleado_edit" name="cod_empleado_edit" class="form-control">
+                <input type="text" id="cod_empleado_edit" name="cod_empleado_edit" class="form-control" required>
             </div>
-
+            <div class="mb-3">
+                <label for="nombre_edit" class="form-label">Nombre:</label>
+                <input type="text" id="nombre_edit" name="nombre_edit" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="primer_apellido_edit" class="form-label">Primer Apellido:</label>
+                <input type="text" id="primer_apellido_edit" name="primer_apellido_edit" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="segundo_apellido_edit" class="form-label">Segundo Apellido:</label>
+                <input type="text" id="segundo_apellido_edit" name="segundo_apellido_edit" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="correo_edit" class="form-label">Correo:</label>
+                <input type="email" id="correo_edit" name="correo_edit" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="numero_edit" class="form-label">Número:</label>
+                <input type="text" id="numero_edit" name="numero_edit" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="departamento_edit" class="form-label">Departamento:</label>
+                <input type="text" id="departamento_edit" name="departamento_edit" class="form-control">
+            </div>
             <button type="submit" class="btn btn-secondary">Editar</button>
         </form>
 
@@ -79,14 +102,20 @@
         <form action="/empleados/eliminar" method="post" class="mb-4">
             <div class="mb-3">
                 <label for="cod_empleado_del" class="form-label">Código de Empleado:</label>
-                <input type="text" id="cod_empleado_del" name="cod_empleado_del" class="form-control">
+                <input type="text" id="cod_empleado_del" name="cod_empleado_del" class="form-control" required>
             </div>
             <button type="submit" class="btn btn-danger">Eliminar</button>
         </form>
+
+        <div style="color: rgb(252, 252, 252);"> <h2>Consultar Empleado</h2> </div>
+<form action="/empleados/consultar" method="get" class="mb-4">
+    <div class="mb-3">
+        <label for="cod_empleado_consulta" class="form-label">Código de Empleado:</label>
+        <input type="text" id="cod_empleado_consulta" name="cod_empleado_consulta" class="form-control" required>
     </div>
-
-
-
+    <button type="submit" class="btn btn-info">Consultar</button>
+</form>
+    </div>
 
     
     <footer>
