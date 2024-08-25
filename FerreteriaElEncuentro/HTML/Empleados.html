@@ -65,34 +65,34 @@
         </form>
 
         <div style="color: rgb(252, 252, 252);"> <h2>Editar Empleado</h2> </div>
-        <form action="/empleados/editar" method="post" class="mb-4">
+        <form action="{{ url_for('edit_empleado', cod_empleado=empleado[0]) }}" method="post" class="mb-4">
             <div class="mb-3">
                 <label for="cod_empleado_edit" class="form-label">Código de Empleado:</label>
-                <input type="text" id="cod_empleado_edit" name="cod_empleado_edit" class="form-control" required>
+                <input type="text" id="cod_empleado_edit" name="cod_empleado_edit" class="form-control" value="{{ empleado[0] }}" readonly>
             </div>
             <div class="mb-3">
                 <label for="nombre_edit" class="form-label">Nombre:</label>
-                <input type="text" id="nombre_edit" name="nombre_edit" class="form-control">
+                <input type="text" id="nombre_edit" name="nombre_edit" class="form-control" value="{{ empleado[1] }}" required>
             </div>
             <div class="mb-3">
                 <label for="primer_apellido_edit" class="form-label">Primer Apellido:</label>
-                <input type="text" id="primer_apellido_edit" name="primer_apellido_edit" class="form-control">
+                <input type="text" id="primer_apellido_edit" name="primer_apellido_edit" class="form-control" value="{{ empleado[2] }}" required>
             </div>
             <div class="mb-3">
                 <label for="segundo_apellido_edit" class="form-label">Segundo Apellido:</label>
-                <input type="text" id="segundo_apellido_edit" name="segundo_apellido_edit" class="form-control">
+                <input type="text" id="segundo_apellido_edit" name="segundo_apellido_edit" class="form-control" value="{{ empleado[3] }}" required>
             </div>
             <div class="mb-3">
                 <label for="correo_edit" class="form-label">Correo:</label>
-                <input type="email" id="correo_edit" name="correo_edit" class="form-control">
+                <input type="email" id="correo_edit" name="correo_edit" class="form-control" value="{{ empleado[4] }}" required>
             </div>
             <div class="mb-3">
                 <label for="numero_edit" class="form-label">Número:</label>
-                <input type="text" id="numero_edit" name="numero_edit" class="form-control">
+                <input type="text" id="numero_edit" name="numero_edit" class="form-control" value="{{ empleado[5] }}" required>
             </div>
             <div class="mb-3">
                 <label for="departamento_edit" class="form-label">Departamento:</label>
-                <input type="text" id="departamento_edit" name="departamento_edit" class="form-control">
+                <input type="text" id="departamento_edit" name="departamento_edit" class="form-control" value="{{ empleado[6] }}" required>
             </div>
             <button type="submit" class="btn btn-secondary">Editar</button>
         </form>

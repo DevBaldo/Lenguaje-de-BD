@@ -252,7 +252,7 @@ def edit_empleado(cod_empleado):
     cursor = connection.cursor()
 
     if request.method == 'GET':
-        # Llamar al procedimiento  de los datos del empleado
+        # Obtener los datos del empleado para mostrar en el formulario
         cursor.execute("SELECT nombre, primer_apellido, segundo_apellido, correo, numero, departamento FROM Vista_Empleados WHERE cod_empleado = :1", (cod_empleado,))
         empleado = cursor.fetchone()
         cursor.close()
@@ -260,17 +260,17 @@ def edit_empleado(cod_empleado):
         return render_template('edit_empleado.html', empleado=empleado)
 
     elif request.method == 'POST':
-        nombre = request.form['nombre']
-        primer_apellido = request.form['primer_apellido']
-        segundo_apellido = request.form['segundo_apellido']
-        correo = request.form['correo']
-        numero = request.form['numero']
-        departamento = request.form['departamento']
+        nombre = request.form['nombre_edit']
+        primer_apellido = request.form['primer_apellido_edit']
+        segundo_apellido = request.form['segundo_apellido_edit']
+        correo = request.form['correo_edit']
+        numero = request.form['numero_edit']
+        departamento = request.form['departamento_edit']
 
         print(f"Empleado actualizado: {cod_empleado}, {nombre}, {primer_apellido}, {segundo_apellido}, {correo}, {numero}, {departamento}")
 
         try:
-            # Llamar al procedimiento ara actualizar un empleado
+            # Llamar al procedimiento para actualizar el empleado
             cursor.callproc('actualizar_empleado', [cod_empleado, nombre, primer_apellido, segundo_apellido, correo, numero, departamento])
             connection.commit()
         except cx_Oracle.DatabaseError as e:
