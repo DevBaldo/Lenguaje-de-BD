@@ -1,3 +1,13 @@
+--Login 
+create table usuarios (id_usuario INT PRIMARY KEY, email VARCHAR2(50) unique not null, contrasena VARCHAR2(255) not null);
+create SEQUENCE usuarios_seq start with 1 INCREMENT by 1 NOCACHE NOCYCLE;
+select usuarios_seq.NEXTVAL FROM dual;
+insert into usuarios(id_usuario, email, contrasena)
+values (usuarios_seq.NEXTVAL, 'admin@dominio.com', '12345');
+select * from usuarios
+commit;
+
+
 /* P R O V E E D O R E S */
 
 CREATE TABLE Proveedores (CodProveedor INT PRIMARY KEY, nombre_proveedor VARCHAR2(100), producto_ventas VARCHAR2(100));

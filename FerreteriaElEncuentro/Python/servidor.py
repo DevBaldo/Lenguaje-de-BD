@@ -7,7 +7,6 @@ app = Flask(
     static_folder=None
 )
 
-
 class Config:
     ORACLE_USER = 'JESS'
     ORACLE_PASSWORD = 'Jm12345'
