@@ -441,109 +441,88 @@ def anadirproductos():
 @app.route("/Proveedores", methods=['GET', 'POST'])
 def proveedores():
     if request.method == 'POST':
-        CodProveedor  = request.form['CodProveedor ']
-        nombre_proveedor = request.form['nombre_proveedor']
-        producto_ventas = request.form['producto_ventas']
-        print(f"Proveedor registrado: {CodProveedor }, {nombre_proveedor}, {producto_ventas}")
-
+        CodProveedor = request.form.get('CodProveedor')
+        nombre_proveedor = request.form.get('nombre_proveedor')
+        producto_ventas = request.form.get('producto_ventas')
+        
         connection = get_db_connection()
         cursor = connection.cursor()
-        cursor.execute(
-            "INSERT INTO Proveedores (CodProveedor, nombre_proveedor, producto_ventas) VALUES (:1, :2, :3)",
-            (CodProveedor , nombre_proveedor, producto_ventas)
-        )
+        # Llamar al procedimiento para insertar proveedor
+        cursor.callproc('pkg_proveedores.insertar_proveedor', [nombre_proveedor, producto_ventas])
         connection.commit()
         cursor.close()
         connection.close()
+        
+        print(f"Proveedor registrado: {nombre_proveedor}, {producto_ventas}")
         return redirect(url_for('proveedores'))
-
+    
     connection = get_db_connection()
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM Proveedores")
+    cursor.execute("SELECT * FROM Vista_Proveedores")  
     proveedores = cursor.fetchall()
     cursor.close()
     connection.close()
+    
     return render_template("Proveedores.html", proveedores=proveedores)
 
-@app.route("/proveedores/edit/<CodProveedor >", methods=['POST'])
-def edit_proveedor(CodProveedor ):
-    nombre_proveedor = request.form['nombre_proveedor']
-    producto_ventas = request.form['producto_ventas']
-    print(f"Proveedor actualizado: {CodProveedor }, {nombre_proveedor}, {producto_ventas}")
-
+@app.route("/proveedores/editar", methods=['POST'])
+def edit_proveedor():
+    CodProveedor = request.form.get('CodProveedor_edit')
+    nombre_proveedor = request.form.get('nombre_proveedor_edit')
+    producto_ventas = request.form.get('producto_ventas_edit')
+    
     connection = get_db_connection()
     cursor = connection.cursor()
-    cursor.execute(
-        "UPDATE Proveedores SET nombre_proveedor = :1, producto_ventas = :2 WHERE CodProveedor = :3",
-        (nombre_proveedor, producto_ventas, CodProveedor )
-    )
+    # Llamar al procedimiento para actualizar proveedor
+    cursor.callproc('pkg_proveedores.actualizar_proveedor', [CodProveedor, nombre_proveedor, producto_ventas])
     connection.commit()
     cursor.close()
     connection.close()
+    
+    print(f"Proveedor actualizado: {CodProveedor}, {nombre_proveedor}, {producto_ventas}")
     return redirect(url_for('proveedores'))
 
-@app.route("/proveedores/delete/<CodProveedor >", methods=['POST'])
-def delete_proveedor(CodProveedor ):
-    print(f"Proveedor eliminado: {CodProveedor }")
-
+@app.route("/proveedores/eliminar", methods=['POST'])
+def delete_proveedor():
+    CodProveedor = request.form.get('CodProveedor_del')
     connection = get_db_connection()
     cursor = connection.cursor()
-    cursor.execute("DELETE FROM Proveedores WHERE CodProveedor = :1", (CodProveedor ,))
+    # Llamar al procedimiento para eliminar proveedor
+    cursor.callproc('pkg_proveedores.eliminar_proveedor', [CodProveedor])
     connection.commit()
     cursor.close()
     connection.close()
+    
+    print(f"Proveedor eliminado: {CodProveedor}")
     return redirect(url_for('proveedores'))
 
-@app.route('/verProveedoresEliminados')
-def ver_proveedores_eliminados():
+@app.route("/proveedores/<int:CodProveedor>")
+def view_proveedor(CodProveedor):
     connection = get_db_connection()
     cursor = connection.cursor()
-    cursor.execute("SELECT id_auditoria, CodProveedor, nombre_proveedor, producto_ventas, operacion, fecha FROM auditoria_proveedores ORDER BY fecha DESC")
-    proveedores_eliminados = cursor.fetchall()
+    nombre_proveedor = cursor.var(cx_Oracle.STRING)
+    producto_ventas = cursor.var(cx_Oracle.STRING)
+    # Llamar al procedimiento para obtener datos del proveedor
+    cursor.callproc('Obtener_Proveedor', [CodProveedor, nombre_proveedor, producto_ventas])
     cursor.close()
     connection.close()
-    return render_template('ver_proveedores_eliminados.html', proveedores=proveedores_eliminados)
+    
+    print(f"Proveedor consultado: {CodProveedor}, {nombre_proveedor.getvalue()}, {producto_ventas.getvalue()}")
+    return render_template("view_proveedor.html", CodProveedor=CodProveedor, nombre_proveedor=nombre_proveedor.getvalue(), producto_ventas=producto_ventas.getvalue())
 
-@app.route('/obtenerProveedoresPorProducto/<producto>', methods=['GET'])
-def obtener_proveedores_por_producto(producto):
-    connection = get_db_connection()
-    cursor = connection.cursor()
-    cursor.execute("SELECT CodProveedor, nombre_proveedor FROM vista_proveedores_por_producto WHERE producto_ventas = :1", (producto,))
-    proveedores = cursor.fetchall()
-    cursor.close()
-    connection.close()
-    return render_template('proveedores_por_producto.html', proveedores=proveedores, producto=producto)
-
-@app.route('/obtenerNombreProveedor/<CodProveedor >', methods=['GET'])
-def obtener_nombre_proveedor(CodProveedor ):
-    connection = get_db_connection()
-    cursor = connection.cursor()
-    cursor.callproc('obtener_nombre_proveedor', [CodProveedor , cursor.var(cx_Oracle.STRING), cursor.var(cx_Oracle.STRING)])
-    nombre_proveedor = cursor.var(cx_Oracle.STRING).getvalue()
-    cursor.close()
-    connection.close()
-    return f'Nombre del proveedor: {nombre_proveedor}'
-
-@app.route('/obtenerProductoVentas/<CodProveedor >', methods=['GET'])
-def obtener_producto_ventas(CodProveedor ):
-    connection = get_db_connection()
-    cursor = connection.cursor()
-    cursor.callproc('obtener_producto_ventas', [CodProveedor , cursor.var(cx_Oracle.STRING)])
-    producto_ventas = cursor.var(cx_Oracle.STRING).getvalue()
-    cursor.close()
-    connection.close()
-    return f'Producto de ventas: {producto_ventas}'
-
-@app.route('/contarProveedores', methods=['GET'])
+@app.route('/contarProveedores')
 def contar_proveedores():
     connection = get_db_connection()
     cursor = connection.cursor()
+    # Llamar al procedimiento para contar proveedores
     count = cursor.callfunc('contar_proveedores_func', int)
     cursor.close()
     connection.close()
-    return f'Número de proveedores: {count}'
+    
+    print(f"Total de proveedores: {count}")
+    return f"Total de proveedores: {count}"
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
 
 #####################Sucursales#####################

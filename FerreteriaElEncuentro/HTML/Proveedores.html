@@ -33,45 +33,60 @@
 
 
     <div class="container">
-        <div style="color: rgb(252, 252, 252);"> <h2>Registro de Proveedores</h2> </div>
+        <!-- agregar proveedor -->
+        <div style="color: rgb(252, 252, 252);"> <h2>Agregar Proveedor</h2> </div>
         <form action="/proveedores" method="post" class="mb-4">
             <div class="mb-3">
-                <label for="cod_proveedor" class="form-label">Código de Proveedor:</label>
-                <input type="text" id="cod_proveedor" name="cod_proveedor" class="form-control">
-            </div>
-            <div class="mb-3">
                 <label for="nombre_proveedor" class="form-label">Nombre del Proveedor:</label>
-                <input type="text" id="nombre_proveedor" name="nombre_proveedor" class="form-control">
+                <input type="text" id="nombre_proveedor" name="nombre_proveedor" class="form-control" required>
             </div>
             <div class="mb-3">
                 <label for="producto_ventas" class="form-label">Producto Ventas:</label>
-                <input type="text" id="producto_ventas" name="producto_ventas" class="form-control">
+                <input type="text" id="producto_ventas" name="producto_ventas" class="form-control" required>
             </div>
-            <button type="submit" class="btn btn-primary">Registrar</button>
+            <button type="submit" class="btn btn-primary">Agregar</button>
         </form>
 
+        <!--editar proveedor -->
         <div style="color: rgb(252, 252, 252);"> <h2>Editar Proveedor</h2> </div>
         <form action="/proveedores/editar" method="post" class="mb-4">
             <div class="mb-3">
-                <label for="cod_proveedor_edit" class="form-label">Código de Proveedor:</label>
-                <input type="text" id="cod_proveedor_edit" name="cod_proveedor_edit" class="form-control">
+                <label for="CodProveedor_edit" class="form-label">Código de Proveedor:</label>
+                <input type="text" id="CodProveedor_edit" name="CodProveedor_edit" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="nombre_proveedor_edit" class="form-label">Nuevo Nombre del Proveedor:</label>
+                <input type="text" id="nombre_proveedor_edit" name="nombre_proveedor_edit" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="producto_ventas_edit" class="form-label">Nuevo Producto Ventas:</label>
+                <input type="text" id="producto_ventas_edit" name="producto_ventas_edit" class="form-control" required>
             </div>
             <button type="submit" class="btn btn-secondary">Editar</button>
         </form>
 
-        <div style="color: rgb(252, 252, 252);"> <h2>Eliminar Empleado</h2> </div>
+        <!--eliminar proveedor -->
+        <div style="color: rgb(252, 252, 252);"> <h2>Eliminar Proveedor</h2> </div>
         <form action="/proveedores/eliminar" method="post" class="mb-4">
             <div class="mb-3">
-                <label for="cod_proveedor_del" class="form-label">Código de Proveedor:</label>
-                <input type="text" id="cod_proveedor_del" name="cod_proveedor_del" class="form-control">
+                <label for="CodProveedor_del" class="form-label">Código de Proveedor:</label>
+                <input type="text" id="CodProveedor_del" name="CodProveedor_del" class="form-control" required>
             </div>
             <button type="submit" class="btn btn-danger">Eliminar</button>
         </form>
+
+        <!-- Sección para listar proveedores -->
+        <div style="color: rgb(252, 252, 252);"> <h2>Listado de Proveedores</h2> </div>
+        <div id="proveedores-list">
+            {% for proveedor in proveedores %}
+                <p>{{ proveedor.nombre_proveedor }} - {{ proveedor.producto_ventas }}</p>
+            {% endfor %}
+        </div>
     </div>
 
+    <footer>
+        <div class="footer-columns">
 
-
-    
     <footer>
         <div class="footer-columns">
             <div>
