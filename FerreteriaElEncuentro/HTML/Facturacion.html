@@ -30,53 +30,89 @@
         <img src="/recursos/img/Banner.jpeg" alt="icono" class="banner"> 
     </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    <footer>
-        <div class="footer-columns">
-            <div>
-                <h5>Nosotros</h5>
-                <p class="nosotros">
-                    Ubicados en el corazón de Costa Rica, en El Encuentro nos dedicamos a ofrecer productos de calidad para
-                    todas tus necesidades de construcción y remodelación. Nuestro proyecto fue creado con el objetivo de
-                    aplicar los conocimientos adquiridos en lenguajes de bases de datos, asegurando un manejo eficiente y
-                    moderno de nuestro inventario y servicios.
-                    Nos enorgullecemos de brindar atención personalizada y soluciones innovadoras para nuestros clientes.
-                    ¡Visítanos y encuentra todo lo que necesitas para tus proyectos!
-                </p>
-            </div>
-    
-            <div>
-                <h5>Siguenos en</h5>
-                <img src="/recursos/img/redessociales.png" alt="productoimg" width="190" height="190" class="redes">
-            </div>
-    
-    
-            <div>
-                <h5>Servicio Al Cliente</h5>
-                <h3 class="serviciocliente">+506 22244-556</h3>
-            </div>
-    
+    <div class="facturacion-container">
+        <h2>Facturación</h2>
+        <div class="factura-info">
+            <h3>Datos de la Empresa</h3>
+            <p><strong>Nombre:</strong> El Encuentro</p>
+            <p><strong>Dirección:</strong> Costa Rica</p>
+            <p><strong>Teléfono:</strong> +506 22244-556</p>
+            <p><strong>Correo:</strong> contacto@elencuentro.cr</p>
         </div>
-    </footer>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="/JS/script.js">
-    </body>
+        <div class="factura-form">
+            <h3>Detalles de la Factura</h3>
+            <form id="factura-form">
+                <label for="cliente">Nombre del Cliente:</label>
+                <input type="text" id="cliente" name="cliente" required>
+
+                <label for="producto">Producto:</label>
+                <input type="text" id="producto" name="producto" required>
+
+                <label for="cantidad">Cantidad:</label>
+                <input type="number" id="cantidad" name="cantidad" required>
+
+                <label for="precio">Precio Unitario:</label>
+                <input type="number" id="precio" name="precio" step="0.01" required>
+
+                <label for="total">Total:</label>
+                <input type="text" id="total" name="total" readonly>
+
+                <button type="button" onclick="generarFactura()">Generar Factura</button>
+            </form>
+        </div>
+        <div id="factura-result" class="factura-result"></div>
+    </div>
+
+
+<footer>
+    <div class="footer-columns">
+        <div> <h3>Nosotros</h3>
+<p class="nosotros">
+    Ubicados en el corazón de Costa Rica, en El Encuentro nos dedicamos a ofrecer productos de calidad para todas tus necesidades de construcción y remodelación. Nuestra empresa fue fundada con el objetivo de aplicar los conocimientos adquiridos en lenguajes de bases de datos, asegurando un manejo eficiente y moderno de nuestro inventario y servicios. 
+    Nos enorgullecemos de brindar atención personalizada y soluciones innovadoras para nuestros clientes. ¡Visítanos y encuentra todo lo que necesitas para tus proyectos!   
+</p>
+</div>
+
+<div><h3>Siguenos en</h3>
+    <img src="/recursos/img/redessociales.png" alt="productoimg" width="220" height="220" class="redes">
+</div>
+
+
+<div> <h3>Servicio Al Cliente</h3>
+<h2 class="serviciocliente">+506 22244-556</h2>
+</div>
+        
+    </div>
+</footer>
+
+<script>
+    function generarFactura() {
+        const cliente = document.getElementById('cliente').value;
+        const producto = document.getElementById('producto').value;
+        const cantidad = parseFloat(document.getElementById('cantidad').value);
+        const precio = parseFloat(document.getElementById('precio').value);
+        const total = cantidad * precio;
+
+        document.getElementById('total').value = total.toFixed(2);
+
+        const resultado = `
+            <h3>Factura Generada</h3>
+            <p><strong>Cliente:</strong> ${cliente}</p>
+            <p><strong>Producto:</strong> ${producto}</p>
+            <p><strong>Cantidad:</strong> ${cantidad}</p>
+            <p><strong>Precio Unitario:</strong> ₡${precio.toFixed(2)}</p>
+            <p><strong>Total:</strong> ₡${total.toFixed(2)}</p>
+        `;
+
+        document.getElementById('factura-result').innerHTML = resultado;
+    }
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="/JS/script.js">
+</body>
 </html>

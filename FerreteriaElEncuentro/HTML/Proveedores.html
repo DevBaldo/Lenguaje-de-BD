@@ -2,9 +2,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Departamentos</title>
+<title>Proveedores</title>
 <link rel="stylesheet" href="/css/style.css">
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 <body>
     <div class="icon">
@@ -27,51 +29,121 @@
     </div>
 
     <div class="banner-container">
-        <img src="/recursos/img/Banner.jpeg" alt="icono" class="banner"> 
+        <img src="/recursos/img/Banner.jpeg" alt="icono" class="banner">
     </div>
-
-
 
     <div class="container">
-        <div style="color: rgb(252, 252, 252);"> <h2>Registro de Proveedores</h2> </div>
-        <form action="/proveedores" method="post" class="mb-4">
-            <div class="mb-3">
-                <label for="cod_proveedor" class="form-label">Código de Proveedor:</label>
-                <input type="text" id="cod_proveedor" name="cod_proveedor" class="form-control">
+        <h1 class="text-white">Gestión de Proveedores</h1>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        Registrar Nuevo Proveedor
+                    </div>
+                    <div class="card-body">
+                        <form action="/proveedores" method="post">
+                            <div class="form-group">
+                                <label for="CodProveedor">Código de Proveedor:</label>
+                                <input type="text" class="form-control" id="CodProveedor" name="CodProveedor" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="nombre_proveedor">Nombre del Proveedor:</label>
+                                <input type="text" class="form-control" id="nombre_proveedor" name="nombre_proveedor" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="producto_ventas">Producto de Ventas:</label>
+                                <input type="text" class="form-control" id="producto_ventas" name="producto_ventas" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Registrar</button>
+                        </form>                        
+                    </div>
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="nombre_proveedor" class="form-label">Nombre del Proveedor:</label>
-                <input type="text" id="nombre_proveedor" name="nombre_proveedor" class="form-control">
-            </div>
-            <div class="mb-3">
-                <label for="producto_ventas" class="form-label">Producto Ventas:</label>
-                <input type="text" id="producto_ventas" name="producto_ventas" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-primary">Registrar</button>
-        </form>
+            <div class="col-md-8">
+                <div class="card custom-card">
+                    <div class="card-header bg-dark text-white">
+                        Lista de Proveedores
+                    </div>
+                    <div>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Nombre</th>
+                                    <th>Producto de Ventas</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for proveedor in proveedores %}
+                                <tr>
+                                    <td>{{ proveedor[0] }}</td>
+                                    <td>{{ proveedor[1] }}</td>
+                                    <td>{{ proveedor[2] }}</td>
+                                    <td>
+                                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editProveedorModal{{ proveedor[0] }}">Editar</button>
+                                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteProveedorModal{{ proveedor[0] }}">Eliminar</button>
+                                    </td>
+                                </tr>
 
-        <div style="color: rgb(252, 252, 252);"> <h2>Editar Proveedor</h2> </div>
-        <form action="/proveedores/editar" method="post" class="mb-4">
-            <div class="mb-3">
-                <label for="cod_proveedor_edit" class="form-label">Código de Proveedor:</label>
-                <input type="text" id="cod_proveedor_edit" name="cod_proveedor_edit" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-secondary">Editar</button>
-        </form>
+                                <!-- Modal Editar Proveedor -->
+                                <div class="modal fade" id="editProveedorModal{{ proveedor[0] }}" tabindex="-1"
+                                    aria-labelledby="editProveedorModalLabel{{ proveedor[0] }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="editProveedorModalLabel{{ proveedor[0] }}">Editar Proveedor</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="{{ url_for('edit_proveedor', CodProveedor=proveedor[0]) }}" method="post">
+                                                    <div class="form-group">
+                                                        <label for="nombre_proveedor">Nombre del Proveedor:</label>
+                                                        <input type="text" class="form-control" id="nombre_proveedor" name="nombre_proveedor" value="{{ proveedor[1] }}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="producto_ventas">Producto de Ventas:</label>
+                                                        <input type="text" class="form-control" id="producto_ventas" name="producto_ventas"
+                                                            value="{{ proveedor[2] }}">
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-        <div style="color: rgb(252, 252, 252);"> <h2>Eliminar Empleado</h2> </div>
-        <form action="/proveedores/eliminar" method="post" class="mb-4">
-            <div class="mb-3">
-                <label for="cod_proveedor_del" class="form-label">Código de Proveedor:</label>
-                <input type="text" id="cod_proveedor_del" name="cod_proveedor_del" class="form-control">
+
+                                <!-- Modal Eliminar Proveedor -->
+                                <div class="modal fade" id="deleteProveedorModal{{ proveedor[0] }}" tabindex="-1" aria-labelledby="deleteProveedorModalLabel{{ proveedor[0] }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteProveedorModalLabel{{ proveedor[0] }}">Eliminar Proveedor</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>¿Estás seguro de que deseas eliminar al proveedor {{ proveedor[1] }}?</p>
+                                                <form action="{{ url_for('delete_proveedores', CodProveedor=proveedor[0]) }}" method="post">
+                                                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                </form>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <button type="submit" class="btn btn-danger">Eliminar</button>
-        </form>
+        </div>
     </div>
 
-
-
-    
+    <!-- Footer -->    
     <footer>
         <div class="footer-columns">
             <div>
@@ -82,7 +154,7 @@
                     aplicar los conocimientos adquiridos en lenguajes de bases de datos, asegurando un manejo eficiente y
                     moderno de nuestro inventario y servicios.
                     Nos enorgullecemos de brindar atención personalizada y soluciones innovadoras para nuestros clientes.
-                    ¡Visítanos y encuentra todo lo que necesitas para tus proyectos!
+                    ¡Visítanos y encuentra todo lo que necesitas para tus proyectos!               
                 </p>
             </div>
     
@@ -99,12 +171,5 @@
     
         </div>
     </footer>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="/JS/script.js">
-    </body>
+</body>
 </html>
