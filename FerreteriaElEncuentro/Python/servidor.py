@@ -26,6 +26,31 @@ def get_db_connection():
 def index():
     return render_template("index.html")
 
+def esta_autenticado():
+    return 'user' in session
+@app.route('/')
+def inicio():
+    if esta_autenticado():
+        return redirect(url_for('index'))
+    return redirect(url_for('login'))
+
+#####################Login#####################
+@app.route("/login",methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        contrasena = request.form ['contrasena']
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('SELECT contrasena FROM Usuarios WHERE email = :email', {'email':email})
+        hashed_password = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        
+
+
+
 #####################Clientes#####################
 @app.route("/clientes", methods=['GET'])
 @app.route("/Clientes", methods=['GET'])
