@@ -72,7 +72,7 @@
 </tr>
 <tr>
 <td>OBJECT_ID</td>
-<td>74988</td>
+<td>73215</td>
 </tr>
 <tr>
 <td>DATA_OBJECT_ID</td>
@@ -84,15 +84,15 @@
 </tr>
 <tr>
 <td>CREATED</td>
-<td>21-JUL-24</td>
+<td>12-AUG-24</td>
 </tr>
 <tr>
 <td>LAST_DDL_TIME</td>
-<td>21-JUL-24</td>
+<td>15-AUG-24</td>
 </tr>
 <tr>
 <td>TIMESTAMP</td>
-<td>2024-07-21:20:38:22</td>
+<td>2024-08-15:19:43:30</td>
 </tr>
 <tr>
 <td>STATUS</td>
@@ -214,7 +214,7 @@ PROCEDURE LeerTodosLosProductos (
 ) AS
 BEGIN
     OPEN cur FOR
-    SELECT cod_producto, nombre, imagen, precio, cod_inventario
+    SELECT cod_producto, nombre, imagen, precio, stock, cod_inventario
     FROM productos;
 END;</pre>
 </div>

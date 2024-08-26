@@ -46,10 +46,10 @@
 <div id="Master.0">
 <div class="currentmasterreport">
 <TABLE CELLSPACING="0" CELLPADDING="1" WIDTH="100%" BORDER="0">
-<TR><TD CLASS="NavBarRow3" VALIGN="top"><FONT SIZE="-2">      SUMMARY:  <A HREF="#field_summary">FIELD</A> | <A HREF="#type_summary">TYPE</A> | <A HREF="#method_summary">METHOD</A></FONT></TD><TD CLASS="NavBarRow3" VALIGN="top"><FONT SIZE="-2"></TR></TABLE><HR><P></P><HR><P></P><A NAME="method_summary"></A><TABLE WIDTH="100%" CELLSPACING="0" CELLPADDING="3" BORDER="1"><TR CLASS="TableHeadingColor"><TD COLSPAN="2"><FONT SIZE="+2"><B>Method Summary</B></FONT></TD><TR CLASS="TableRowColor"><TD WIDTH="1%" VALIGN="top" ALIGN="right"><FONT SIZE="-1"><CODE>&nbsp;</CODE></FONT></TD><TD><CODE><B><A HREF="#Insertar_Proveedor">Insertar_Proveedor</A></B>( p_CodProveedor IN INT , p_nombre_proveedor IN VARCHAR2 , p_producto_ventas IN VARCHAR2 ) </CODE><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD></TR>
+<TR><TD CLASS="NavBarRow3" VALIGN="top"><FONT SIZE="-2">      SUMMARY:  <A HREF="#field_summary">FIELD</A> | <A HREF="#type_summary">TYPE</A> | <A HREF="#method_summary">METHOD</A></FONT></TD><TD CLASS="NavBarRow3" VALIGN="top"><FONT SIZE="-2"></TR></TABLE><HR><P></P><HR><P></P><A NAME="method_summary"></A><TABLE WIDTH="100%" CELLSPACING="0" CELLPADDING="3" BORDER="1"><TR CLASS="TableHeadingColor"><TD COLSPAN="2"><FONT SIZE="+2"><B>Method Summary</B></FONT></TD><TR CLASS="TableRowColor"><TD WIDTH="1%" VALIGN="top" ALIGN="right"><FONT SIZE="-1"><CODE>&nbsp;</CODE></FONT></TD><TD><CODE><B><A HREF="#insertar_proveedor">insertar_proveedor</A></B>( p_cod_proveedor IN INT , p_nombre_proveedor IN VARCHAR2 , p_producto_ventas IN VARCHAR2 ) </CODE><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD></TR>
 </TABLE>
-<P></P><A NAME="method_detail"></A><TABLE WIDTH="100%" CELLSPACING="0" CELLPADDING="3" BORDER="1"><TR CLASS="TableHeadingColor"><TD COLSPAN="2"><FONT SIZE="+2"><B>Method Detail</B></FONT></TD></TABLE><A NAME="Insertar_Proveedor"></A>
-<H3>Insertar_Proveedor</H3><PRE>          <B>Insertar_Proveedor</B>( p_CodProveedor IN INT , p_nombre_proveedor IN VARCHAR2 , p_producto_ventas IN VARCHAR2 ) </PRE><DL>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<DD><DL></DL></DD></DL><HR><TABLE CELLSPACING="0" CELLPADDING="1" WIDTH="100%" BORDER="0">
+<P></P><A NAME="method_detail"></A><TABLE WIDTH="100%" CELLSPACING="0" CELLPADDING="3" BORDER="1"><TR CLASS="TableHeadingColor"><TD COLSPAN="2"><FONT SIZE="+2"><B>Method Detail</B></FONT></TD></TABLE><A NAME="insertar_proveedor"></A>
+<H3>insertar_proveedor</H3><PRE>          <B>insertar_proveedor</B>( p_cod_proveedor IN INT , p_nombre_proveedor IN VARCHAR2 , p_producto_ventas IN VARCHAR2 ) </PRE><DL>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<DD><DL></DL></DD></DL><HR><TABLE CELLSPACING="0" CELLPADDING="1" WIDTH="100%" BORDER="0">
 <TR><TD CLASS="NavBarRow3" VALIGN="top"><FONT SIZE="-2">      SUMMARY:  <A HREF="#field_summary">FIELD</A> | <A HREF="#type_summary">TYPE</A> | <A HREF="#method_summary">METHOD</A></FONT></TD><TD CLASS="NavBarRow3" VALIGN="top"><FONT SIZE="-2"></TR></TABLE></div>
 </div>
 <div id="Master.1">
@@ -72,7 +72,7 @@
 </tr>
 <tr>
 <td>OBJECT_ID</td>
-<td>74999</td>
+<td>73220</td>
 </tr>
 <tr>
 <td>DATA_OBJECT_ID</td>
@@ -84,15 +84,15 @@
 </tr>
 <tr>
 <td>CREATED</td>
-<td>22-JUL-24</td>
+<td>12-AUG-24</td>
 </tr>
 <tr>
 <td>LAST_DDL_TIME</td>
-<td>22-JUL-24</td>
+<td>25-AUG-24</td>
 </tr>
 <tr>
 <td>TIMESTAMP</td>
-<td>2024-07-22:16:05:58</td>
+<td>2024-08-25:17:46:15</td>
 </tr>
 <tr>
 <td>STATUS</td>
@@ -209,15 +209,15 @@
 <div id="Master.5">
 <div class="masterreport">
 <pre>
-PROCEDURE Insertar_Proveedor (
-    p_CodProveedor IN INT,
+PROCEDURE insertar_proveedor (
+    p_cod_proveedor IN INT,
     p_nombre_proveedor IN VARCHAR2,
     p_producto_ventas IN VARCHAR2
 ) AS
 BEGIN
     INSERT INTO Proveedores (CodProveedor, nombre_proveedor, producto_ventas)
-    VALUES (p_CodProveedor, p_nombre_proveedor, p_producto_ventas);
-END;</pre>
+    VALUES (p_cod_proveedor, p_nombre_proveedor, p_producto_ventas);
+END insertar_proveedor;</pre>
 </div>
 </div>
 </div>

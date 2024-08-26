@@ -1,14 +1,23 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Departamentos</title>
-<link rel="stylesheet" href="/css/style.css">
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="icon">
-        <a href="/" class="icon-text"><img src="/recursos/img/logo.png" alt="icono" class="iconimg"> <h2>El Encuentro</h2> </a>
+        <a href="/" class="icon-text">
+            <img src="/recursos/img/logo.png" alt="icono" class="iconimg">
+            <h2>El Encuentro</h2>
+        </a>
+        {% if 'user' in session %}
+        <div class="logout">
+            <a href="{{ url_for('cerrar_sesion') }}" class="btn btn-outline-dark btn-sm text-white"><i class="fa-solid fa-right-from-bracket"></i>Cerrar sesión</a>
+        </div>
+        {% endif %}
     </div>
 
     <div>
@@ -29,21 +38,49 @@
     <div class="banner-container">
         <img src="/recursos/img/Banner.jpeg" alt="icono" class="banner"> 
     </div>
+    <div class="container2 mt-5"> 
+        
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1>Inventario</h1>
+        </div>
+        <div class="d-flex">
+            <button class="btn btn-success mr-2"><a href="/addInventario" class="text-white text-decoration-none">+ Agregar</a></button>
+            <button class="btn btn-info"><a href="/verInventariosEliminados" class="text-white text-decoration-none">Ver Inventarios Eliminados</a></button>
+            <a href="{{ url_for('ver_stock_productos') }}" class="text-white text-decoration-none">
+                <i class="fas fa-chart-pie fa-2x" style="color: black; padding-left: 10px;"></i> Ver Stock de Productos
+            </a>
+            
+        </div>
+        <br><br>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Código Inventario</th>
+                <th>Código Sucursal</th>
+                <th>Cantidad</th>
+                <th>Fecha de Ingreso</th>
+                <th>Acción</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for inventario in inventarios %}
+            <tr>
+                <td>{{ inventario[0] }}</td>
+                <td>{{ inventario[1] }}</td>
+                <td>{{ inventario[2] }}</td>
+                <td>{{ inventario[3] }}</td>
+                <td class="d-flex align-items-center">
+                    <button class="btn btn-warning btn-sm me-2"><a href="{{ url_for('update_inventario', codigo=inventario[0]) }}" class="text-white text-decoration-none">Actualizar</a></button>
+                    <form action="{{ url_for('eliminar_inventario', codigo=inventario[0]) }}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        
+    </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
     <footer>
         <div class="footer-columns">
             <div>
@@ -63,7 +100,6 @@
                 <img src="/recursos/img/redessociales.png" alt="productoimg" width="190" height="190" class="redes">
             </div>
     
-    
             <div>
                 <h5>Servicio Al Cliente</h5>
                 <h3 class="serviciocliente">+506 22244-556</h3>
@@ -78,5 +114,5 @@
         integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/JS/script.js">
-    </body>
+</body>
 </html>

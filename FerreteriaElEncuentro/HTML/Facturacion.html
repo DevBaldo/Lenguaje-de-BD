@@ -1,14 +1,23 @@
 <!DOCTYPE html>
+<html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Departamentos</title>
-<link rel="stylesheet" href="/css/style.css">
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facturación</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="icon">
-        <a href="/" class="icon-text"><img src="/recursos/img/logo.png" alt="icono" class="iconimg"> <h2>El Encuentro</h2> </a>
+        <a href="/" class="icon-text">
+            <img src="/recursos/img/logo.png" alt="icono" class="iconimg">
+            <h2>El Encuentro</h2>
+        </a>
+        {% if 'user' in session %}
+        <div class="logout">
+            <a href="{{ url_for('cerrar_sesion') }}" class="btn btn-outline-dark btn-sm text-white"><i class="fa-solid fa-right-from-bracket"></i>Cerrar sesión</a>
+        </div>
+        {% endif %}
     </div>
 
     <div>
@@ -25,25 +34,46 @@
             <a href="/Envios"> <h6>Envios </h6></a>
         </nav>
     </div>
+<div class="banner-container">
+    <img src="/recursos/img/Banner.jpeg" alt="icono" class="banner">
+</div>
 
-    <div class="banner-container">
-        <img src="/recursos/img/Banner.jpeg" alt="icono" class="banner"> 
+    <div class="container mt-4">
+        <h1 class="text-white">Gestión de Facturación</h1>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        Lista de Facturas
+                    </div>
+                    <div class="card-body table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Número de Factura</th>
+                                    <th>Cliente</th>
+                                    <th>Producto</th>
+                                    <th>Precio</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for factura in facturas %}
+                                <tr>
+                                    <td>{{ factura[0] }}</td>
+                                    <td>{{ factura[1] }}</td>
+                                    <td>{{ factura[2] }}</td>
+                                    <td>{{ factura[3] }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
+    <!-- Footer -->    
     <footer>
         <div class="footer-columns">
             <div>
@@ -57,26 +87,24 @@
                     ¡Visítanos y encuentra todo lo que necesitas para tus proyectos!
                 </p>
             </div>
-    
+
             <div>
-                <h5>Siguenos en</h5>
+                <h5>Síguenos en</h5>
                 <img src="/recursos/img/redessociales.png" alt="productoimg" width="190" height="190" class="redes">
             </div>
-    
-    
+
             <div>
                 <h5>Servicio Al Cliente</h5>
                 <h3 class="serviciocliente">+506 22244-556</h3>
             </div>
-    
         </div>
     </footer>
+    
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
         integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="/JS/script.js">
-    </body>
+</body>
 </html>

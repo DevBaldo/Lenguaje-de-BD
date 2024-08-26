@@ -8,8 +8,30 @@
 </head>
 <body>
     <div class="icon">
-        <a href="/" class="icon-text"><img src="/recursos/img/logo.png" alt="icono" class="iconimg"> <h2>El Encuentro</h2> </a>
+        <a href="/" class="icon-text">
+            <img src="/recursos/img/logo.png" alt="icono" class="iconimg">
+            <h2>El Encuentro</h2>
+        </a>
+        {% if 'user' in session %}
+        <div class="logout">
+            <a href="{{ url_for('cerrar_sesion') }}" class="btn btn-outline-dark btn-sm text-white"><i class="fa-solid fa-right-from-bracket"></i>Cerrar sesión</a>
+        </div>
+        {% endif %}
     </div>
+
+    <!-- Alerta de mensajes flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container mt-3">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
 
     <div>
         <nav class="navbar">
@@ -35,7 +57,6 @@
 
     <div class="container mt-5">
         <h2>Gestión de Envíos</h2>
-    
         <div class="row">
             <div class="col-md-6">
                 <div class="card mb-4">
@@ -49,32 +70,19 @@
                                 <input type="text" class="form-control" id="codigoEnvio" name="codigoEnvio" required>
                             </div>
                             <div class="mb-3">
-                                <label for="cliente" class="form-label">Cliente:</label>
+                                <label for="cliente" class="form-label">Código de Cliente:</label>
                                 <input type="text" class="form-control" id="cliente" name="cliente" required>
                             </div>
                             <div class="mb-3">
                                 <label for="direccion" class="form-label">Dirección:</label>
                                 <input type="text" class="form-control" id="direccion" name="direccion" required>
                             </div>
-                            <div class="mb-3">
-                                <label for="fechaEnvio" class="form-label">Fecha de Envío:</label>
-                                <input type="date" class="form-control" id="fechaEnvio" name="fechaEnvio" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="estado" class="form-label">Estado:</label>
-                                <select class="form-control" id="estado" name="estado" required>
-                                    <option>Pendiente</option>
-                                    <option>En tránsito</option>
-                                    <option>Entregado</option>
-                                    <option>Cancelado</option>
-                                </select>
-                            </div>
                             <button type="submit" class="btn btn-primary">Registrar</button>
                         </form>
                     </div>
                 </div>
             </div>
-    
+
             <div class="col-md-6">
                 <div class="card mb-4">
                     <div class="card-header bg-dark text-white">
@@ -84,11 +92,9 @@
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Código</th>
+                                    <th>Código Envío</th>
                                     <th>Cliente</th>
                                     <th>Dirección</th>
-                                    <th>Fecha</th>
-                                    <th>Estado</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -98,11 +104,10 @@
                                     <td>{{ envio[0] }}</td>
                                     <td>{{ envio[1] }}</td>
                                     <td>{{ envio[2] }}</td>
-                                    <td>{{ envio[3] }}</td>
-                                    <td>{{ envio[4] }}</td>
                                     <td>
-                                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editEnvioModal{{ envio[0] }}">Editar</button>
-                                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteEnvioModal{{ envio[0] }}">Eliminar</button>
+                                        <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editEnvioModal{{ envio[0] }}">Editar</button>
+
+                                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteEnvioModal{{ envio[0] }}">Eliminar</button>
                                     </td>
                                 </tr>
     
@@ -124,19 +129,7 @@
                                                         <label for="direccion">Dirección:</label>
                                                         <input type="text" class="form-control" id="direccion" name="direccion" value="{{ envio[2] }}">
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label for="fechaEnvio">Fecha de Envío:</label>
-                                                        <input type="date" class="form-control" id="fechaEnvio" name="fechaEnvio" value="{{ envio[3] }}">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="estado">Estado:</label>
-                                                        <select class="form-control" id="estado" name="estado" required>
-                                                            <option value="Pendiente" {% if envio[4] == 'Pendiente' %}selected{% endif %}>Pendiente</option>
-                                                            <option value="En tránsito" {% if envio[4] == 'En tránsito' %}selected{% endif %}>En tránsito</option>
-                                                            <option value="Entregado" {% if envio[4] == 'Entregado' %}selected{% endif %}>Entregado</option>
-                                                            <option value="Cancelado" {% if envio[4] == 'Cancelado' %}selected{% endif %}>Cancelado</option>
-                                                        </select>
-                                                    </div>
+
                                                     <button type="submit" class="btn btn-primary">Guardar cambios</button>
                                                 </form>
                                             </div>

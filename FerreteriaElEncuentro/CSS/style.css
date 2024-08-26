@@ -4,6 +4,13 @@ background-color: #555856 !important;
 
 .icon {
     padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logout {
+    margin-right: 3%;
 }
 
 .iconimg{
@@ -223,6 +230,37 @@ footer {
     margin-top: 25px;
     margin-right: 05%;
 }
+
+.ordenarpor{
+    display: flex;
+    padding: 2%;
+    justify-content: space-between;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    margin-left: 72%;
+    margin-right: 6%;
+}
+
+.texto_compra{
+    margin-left: 82%;
+}
+
+#tabla-productos thead th {
+    color: white;
+}
+
+#tabla-productos tbody td {
+    color: white;
+}
+
+#tabla-productos tfoot td {
+    color: white;
+}
+
 .container2{
     background-color: white;
     padding-left: 100px;
@@ -233,4 +271,3 @@ footer {
     margin-left: 50px;
     margin-right: 50px;
 }
-

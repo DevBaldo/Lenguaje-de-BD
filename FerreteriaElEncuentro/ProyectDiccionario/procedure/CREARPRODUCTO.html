@@ -46,10 +46,10 @@
 <div id="Master.0">
 <div class="currentmasterreport">
 <TABLE CELLSPACING="0" CELLPADDING="1" WIDTH="100%" BORDER="0">
-<TR><TD CLASS="NavBarRow3" VALIGN="top"><FONT SIZE="-2">      SUMMARY:  <A HREF="#field_summary">FIELD</A> | <A HREF="#type_summary">TYPE</A> | <A HREF="#method_summary">METHOD</A></FONT></TD><TD CLASS="NavBarRow3" VALIGN="top"><FONT SIZE="-2"></TR></TABLE><HR><P></P><HR><P></P><A NAME="method_summary"></A><TABLE WIDTH="100%" CELLSPACING="0" CELLPADDING="3" BORDER="1"><TR CLASS="TableHeadingColor"><TD COLSPAN="2"><FONT SIZE="+2"><B>Method Summary</B></FONT></TD><TR CLASS="TableRowColor"><TD WIDTH="1%" VALIGN="top" ALIGN="right"><FONT SIZE="-1"><CODE>&nbsp;</CODE></FONT></TD><TD><CODE><B><A HREF="#CrearProducto">CrearProducto</A></B>( cod_producto IN Productos . cod_producto % TYPE , nombre IN Productos . nombre % TYPE , imagen IN Productos . imagen % TYPE , precio IN Productos . precio % TYPE , cod_inventario IN Productos . cod_inventario % TYPE ) </CODE><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD></TR>
+<TR><TD CLASS="NavBarRow3" VALIGN="top"><FONT SIZE="-2">      SUMMARY:  <A HREF="#field_summary">FIELD</A> | <A HREF="#type_summary">TYPE</A> | <A HREF="#method_summary">METHOD</A></FONT></TD><TD CLASS="NavBarRow3" VALIGN="top"><FONT SIZE="-2"></TR></TABLE><HR><P></P><HR><P></P><A NAME="method_summary"></A><TABLE WIDTH="100%" CELLSPACING="0" CELLPADDING="3" BORDER="1"><TR CLASS="TableHeadingColor"><TD COLSPAN="2"><FONT SIZE="+2"><B>Method Summary</B></FONT></TD><TR CLASS="TableRowColor"><TD WIDTH="1%" VALIGN="top" ALIGN="right"><FONT SIZE="-1"><CODE>&nbsp;</CODE></FONT></TD><TD><CODE><B><A HREF="#CrearProducto">CrearProducto</A></B>( cod_producto IN productos . cod_producto % TYPE , nombre IN productos . nombre % TYPE , imagen IN productos . imagen % TYPE , precio IN productos . precio % TYPE , stock IN productos . stock % TYPE ) </CODE><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD></TR>
 </TABLE>
 <P></P><A NAME="method_detail"></A><TABLE WIDTH="100%" CELLSPACING="0" CELLPADDING="3" BORDER="1"><TR CLASS="TableHeadingColor"><TD COLSPAN="2"><FONT SIZE="+2"><B>Method Detail</B></FONT></TD></TABLE><A NAME="CrearProducto"></A>
-<H3>CrearProducto</H3><PRE>          <B>CrearProducto</B>( cod_producto IN Productos . cod_producto % TYPE , nombre IN Productos . nombre % TYPE , imagen IN Productos . imagen % TYPE , precio IN Productos . precio % TYPE , cod_inventario IN Productos . cod_inventario % TYPE ) </PRE><DL>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<DD><DL></DL></DD></DL><HR><TABLE CELLSPACING="0" CELLPADDING="1" WIDTH="100%" BORDER="0">
+<H3>CrearProducto</H3><PRE>          <B>CrearProducto</B>( cod_producto IN productos . cod_producto % TYPE , nombre IN productos . nombre % TYPE , imagen IN productos . imagen % TYPE , precio IN productos . precio % TYPE , stock IN productos . stock % TYPE ) </PRE><DL>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<DD><DL></DL></DD></DL><HR><TABLE CELLSPACING="0" CELLPADDING="1" WIDTH="100%" BORDER="0">
 <TR><TD CLASS="NavBarRow3" VALIGN="top"><FONT SIZE="-2">      SUMMARY:  <A HREF="#field_summary">FIELD</A> | <A HREF="#type_summary">TYPE</A> | <A HREF="#method_summary">METHOD</A></FONT></TD><TD CLASS="NavBarRow3" VALIGN="top"><FONT SIZE="-2"></TR></TABLE></div>
 </div>
 <div id="Master.1">
@@ -72,7 +72,7 @@
 </tr>
 <tr>
 <td>OBJECT_ID</td>
-<td>74986</td>
+<td>73214</td>
 </tr>
 <tr>
 <td>DATA_OBJECT_ID</td>
@@ -84,15 +84,15 @@
 </tr>
 <tr>
 <td>CREATED</td>
-<td>21-JUL-24</td>
+<td>12-AUG-24</td>
 </tr>
 <tr>
 <td>LAST_DDL_TIME</td>
-<td>21-JUL-24</td>
+<td>19-AUG-24</td>
 </tr>
 <tr>
 <td>TIMESTAMP</td>
-<td>2024-07-21:20:15:45</td>
+<td>2024-08-19:20:50:01</td>
 </tr>
 <tr>
 <td>STATUS</td>
@@ -210,15 +210,15 @@
 <div class="masterreport">
 <pre>
 PROCEDURE CrearProducto (
-    cod_producto IN Productos.cod_producto%TYPE,
-    nombre IN Productos.nombre%TYPE,
-    imagen IN Productos.imagen%TYPE,
-    precio IN Productos.precio%TYPE,
-    cod_inventario IN Productos.cod_inventario%TYPE
+    cod_producto IN productos.cod_producto%TYPE,
+    nombre IN productos.nombre%TYPE,
+    imagen IN productos.imagen%TYPE,
+    precio IN productos.precio%TYPE,
+    stock IN productos.stock%TYPE
 ) AS
 BEGIN
-    INSERT INTO Productos (cod_producto, nombre, imagen, precio, cod_inventario)
-    VALUES (cod_producto, nombre, imagen, precio, cod_inventario);
+    INSERT INTO productos (cod_producto, nombre, imagen, precio, stock)
+    VALUES (cod_producto, nombre, imagen, precio, stock);
 END;</pre>
 </div>
 </div>

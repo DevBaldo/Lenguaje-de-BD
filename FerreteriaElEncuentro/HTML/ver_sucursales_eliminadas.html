@@ -9,7 +9,15 @@
 </head>
 <body>
     <div class="icon">
-        <a href="/" class="icon-text"><img src="/recursos/img/logo.png" alt="icono" class="iconimg"> <h2>El Encuentro</h2> </a>
+        <a href="/" class="icon-text">
+            <img src="/recursos/img/logo.png" alt="icono" class="iconimg">
+            <h2>El Encuentro</h2>
+        </a>
+        {% if 'user' in session %}
+        <div class="logout">
+            <a href="{{ url_for('cerrar_sesion') }}" class="btn btn-outline-dark btn-sm text-white"><i class="fa-solid fa-right-from-bracket"></i>Cerrar sesión</a>
+        </div>
+        {% endif %}
     </div>
 
     <div>

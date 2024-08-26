@@ -152,42 +152,42 @@
 <th>VIEW_RELATED</th>
 </tr>
 <tr onclick="table_onSelectMasterRow(this, 1, 0)" class="currentrow">
-<td class="currentcell">SYS_C007669</td>
-<td class="currentcell">Primary_Key</td>
+<td class="currentcell">FK_DEPARTAMENTO</td>
+<td class="currentcell">Foreign_Key</td>
 <td class="currentcell">null</td>
-<td class="currentcell">null</td>
-<td class="currentcell">null</td>
-<td class="currentcell">null</td>
-<td class="currentcell">null</td>
+<td class="currentcell">PROYECTO</td>
+<td class="currentcell">DEPARTAMENTOS</td>
+<td class="currentcell">SYS_C007507</td>
+<td class="currentcell">CASCADE</td>
 <td class="currentcell">ENABLED</td>
 <td class="currentcell">NOT&nbsp;DEFERRABLE</td>
 <td class="currentcell">VALIDATED</td>
-<td class="currentcell">GENERATED&nbsp;NAME</td>
+<td class="currentcell">USER&nbsp;NAME</td>
 <td class="currentcell">null</td>
 <td class="currentcell">null</td>
-<td class="currentcell">21-JUL-24</td>
-<td class="currentcell">PROYECTO</td>
-<td class="currentcell">SYS_C007669</td>
+<td class="currentcell">24-AUG-24</td>
+<td class="currentcell">null</td>
+<td class="currentcell">null</td>
 <td class="currentcell">null</td>
 <td class="currentcell">null</td>
 </tr>
 <tr onclick="table_onSelectMasterRow(this, 1, 1)">
-<td>SYS_C007670</td>
-<td>Foreign_Key</td>
+<td>SYS_C007508</td>
+<td>Primary_Key</td>
 <td>null</td>
-<td>PROYECTO</td>
-<td>DEPARTAMENTOS</td>
-<td>SYS_C007668</td>
-<td>NO&nbsp;ACTION</td>
+<td>null</td>
+<td>null</td>
+<td>null</td>
+<td>null</td>
 <td>ENABLED</td>
 <td>NOT&nbsp;DEFERRABLE</td>
 <td>VALIDATED</td>
 <td>GENERATED&nbsp;NAME</td>
 <td>null</td>
 <td>null</td>
-<td>21-JUL-24</td>
-<td>null</td>
-<td>null</td>
+<td>12-AUG-24</td>
+<td>PROYECTO</td>
+<td>SYS_C007508</td>
 <td>null</td>
 <td>null</td>
 </tr>
@@ -210,7 +210,7 @@
 <th>COLUMN_POSITION</th>
 </tr>
 <tr onclick="table_onSelectRow(this, 2)" class="currentrow">
-<td class="currentcell">COD_EMPLEADO</td>
+<td class="currentcell">DEPARTAMENTO</td>
 <td class="currentcell">1</td>
 </tr>
 </table>
@@ -223,7 +223,7 @@
 <th>COLUMN_POSITION</th>
 </tr>
 <tr onclick="table_onSelectRow(this, 3)" class="currentrow">
-<td class="currentcell">DEPARTAMENTO</td>
+<td class="currentcell">COD_EMPLEADO</td>
 <td class="currentcell">1</td>
 </tr>
 </table>
@@ -253,27 +253,27 @@
 </tr>
 <tr>
 <td>NUM_ROWS</td>
-<td>null</td>
+<td>48</td>
 </tr>
 <tr>
 <td>BLOCKS</td>
-<td>null</td>
+<td>5</td>
 </tr>
 <tr>
 <td>AVG_ROW_LEN</td>
-<td>null</td>
+<td>59</td>
 </tr>
 <tr>
 <td>SAMPLE_SIZE</td>
-<td>null</td>
+<td>48</td>
 </tr>
 <tr>
 <td>LAST_ANALYZED</td>
-<td>null</td>
+<td>25-AUG-24</td>
 </tr>
 <tr>
 <td>LAST_ANALYZED_SINCE</td>
-<td>null</td>
+<td>25-AUG-24</td>
 </tr>
 </table>
 <br/>
@@ -301,6 +301,14 @@
 <th>STATUS</th>
 <th>TABLE_NAME</th>
 </tr>
+<tr onclick="table_onSelectMasterRow(this, 6, 0)" class="currentrow">
+<td class="currentcell">TRG_AUDIT_EMPLEADOS_UPDATE</td>
+<td class="currentcell">AFTER&nbsp;EACH&nbsp;ROW</td>
+<td class="currentcell">PROYECTO</td>
+<td class="currentcell">UPDATE</td>
+<td class="currentcell">ENABLED</td>
+<td class="currentcell">EMPLEADOS</td>
+</tr>
 </table>
 <br/>
 <hr/>
@@ -313,6 +321,17 @@
 </div>
 <br/>
 <div id="ChildReports.4">
+<div id="Child.0.0.4">
+<div class="currentchildreport"><pre>
+TRIGGER trg_audit_empleados_update
+AFTER UPDATE ON empleados
+FOR EACH ROW
+BEGIN
+    INSERT INTO auditoria_empleados (cod_empleado, operacion, fecha, old_nombre, new_nombre)
+    VALUES (:NEW.cod_empleado, 'UPDATE', SYSDATE, :OLD.nombre, :NEW.nombre);
+END;</pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -345,8 +364,88 @@
 </tr>
 <tr onclick="table_onSelectMasterRow(this, 7, 2)">
 <td>PROYECTO</td>
+<td>OBTENER_TODOS_EMPLEADOS</td>
+<td>PROCEDURE</td>
+<td>PROYECTO</td>
+<td>EMPLEADOS</td>
+<td>TABLE</td>
+</tr>
+<tr onclick="table_onSelectMasterRow(this, 7, 3)">
+<td>PROYECTO</td>
+<td>ELIMINAR_EMPLEADO</td>
+<td>PROCEDURE</td>
+<td>PROYECTO</td>
+<td>EMPLEADOS</td>
+<td>TABLE</td>
+</tr>
+<tr onclick="table_onSelectMasterRow(this, 7, 4)">
+<td>PROYECTO</td>
+<td>CONTAR_EMPLEADOS</td>
+<td>PROCEDURE</td>
+<td>PROYECTO</td>
+<td>EMPLEADOS</td>
+<td>TABLE</td>
+</tr>
+<tr onclick="table_onSelectMasterRow(this, 7, 5)">
+<td>PROYECTO</td>
 <td>VISTA_EMPLEADOS</td>
 <td>VIEW</td>
+<td>PROYECTO</td>
+<td>EMPLEADOS</td>
+<td>TABLE</td>
+</tr>
+<tr onclick="table_onSelectMasterRow(this, 7, 6)">
+<td>PROYECTO</td>
+<td>VISTA_EMPLEADOS_POR_DEPARTAMENTO</td>
+<td>VIEW</td>
+<td>PROYECTO</td>
+<td>EMPLEADOS</td>
+<td>TABLE</td>
+</tr>
+<tr onclick="table_onSelectMasterRow(this, 7, 7)">
+<td>PROYECTO</td>
+<td>OBTENER_NOMBRE_EMPLEADO</td>
+<td>FUNCTION</td>
+<td>PROYECTO</td>
+<td>EMPLEADOS</td>
+<td>TABLE</td>
+</tr>
+<tr onclick="table_onSelectMasterRow(this, 7, 8)">
+<td>PROYECTO</td>
+<td>OBTENER_CORREO_EMPLEADO</td>
+<td>FUNCTION</td>
+<td>PROYECTO</td>
+<td>EMPLEADOS</td>
+<td>TABLE</td>
+</tr>
+<tr onclick="table_onSelectMasterRow(this, 7, 9)">
+<td>PROYECTO</td>
+<td>CONTAR_EMPLEADOS_FUNC</td>
+<td>FUNCTION</td>
+<td>PROYECTO</td>
+<td>EMPLEADOS</td>
+<td>TABLE</td>
+</tr>
+<tr onclick="table_onSelectMasterRow(this, 7, 10)">
+<td>PROYECTO</td>
+<td>PKG_EMPLEADOS</td>
+<td>PACKAGE&nbsp;BODY</td>
+<td>PROYECTO</td>
+<td>EMPLEADOS</td>
+<td>TABLE</td>
+</tr>
+<tr onclick="table_onSelectMasterRow(this, 7, 11)">
+<td>PROYECTO</td>
+<td>PKG_EMPLEADOS_CONSULTAS</td>
+<td>PACKAGE&nbsp;BODY</td>
+<td>PROYECTO</td>
+<td>EMPLEADOS</td>
+<td>TABLE</td>
+</tr>
+<tr onclick="table_onSelectMasterRow(this, 7, 12)">
+<td>PROYECTO</td>
+<td>TRG_AUDIT_EMPLEADOS_UPDATE</td>
+<td>TRIGGER</td>
 <td>PROYECTO</td>
 <td>EMPLEADOS</td>
 <td>TABLE</td>
@@ -402,22 +501,152 @@
 </table>
 </div>
 </div>
+<div id="Child.0.3.5">
+<div class="childreport"><table id="Table.11" cellpadding="0" cellspacing="0" summary="">
+<tr>
+<th>OWNER</th>
+<th>NAME</th>
+<th>TYPE</th>
+<th>REFERENCED_OWNER</th>
+<th>REFERENCED_NAME</th>
+<th>REFERENCED_TYPE</th>
+</tr>
+</table>
+</div>
+</div>
+<div id="Child.0.4.5">
+<div class="childreport"><table id="Table.12" cellpadding="0" cellspacing="0" summary="">
+<tr>
+<th>OWNER</th>
+<th>NAME</th>
+<th>TYPE</th>
+<th>REFERENCED_OWNER</th>
+<th>REFERENCED_NAME</th>
+<th>REFERENCED_TYPE</th>
+</tr>
+</table>
+</div>
+</div>
+<div id="Child.0.5.5">
+<div class="childreport"><table id="Table.13" cellpadding="0" cellspacing="0" summary="">
+<tr>
+<th>OWNER</th>
+<th>NAME</th>
+<th>TYPE</th>
+<th>REFERENCED_OWNER</th>
+<th>REFERENCED_NAME</th>
+<th>REFERENCED_TYPE</th>
+</tr>
+</table>
+</div>
+</div>
+<div id="Child.0.6.5">
+<div class="childreport"><table id="Table.14" cellpadding="0" cellspacing="0" summary="">
+<tr>
+<th>OWNER</th>
+<th>NAME</th>
+<th>TYPE</th>
+<th>REFERENCED_OWNER</th>
+<th>REFERENCED_NAME</th>
+<th>REFERENCED_TYPE</th>
+</tr>
+</table>
+</div>
+</div>
+<div id="Child.0.7.5">
+<div class="childreport"><table id="Table.15" cellpadding="0" cellspacing="0" summary="">
+<tr>
+<th>OWNER</th>
+<th>NAME</th>
+<th>TYPE</th>
+<th>REFERENCED_OWNER</th>
+<th>REFERENCED_NAME</th>
+<th>REFERENCED_TYPE</th>
+</tr>
+</table>
+</div>
+</div>
+<div id="Child.0.8.5">
+<div class="childreport"><table id="Table.16" cellpadding="0" cellspacing="0" summary="">
+<tr>
+<th>OWNER</th>
+<th>NAME</th>
+<th>TYPE</th>
+<th>REFERENCED_OWNER</th>
+<th>REFERENCED_NAME</th>
+<th>REFERENCED_TYPE</th>
+</tr>
+</table>
+</div>
+</div>
+<div id="Child.0.9.5">
+<div class="childreport"><table id="Table.17" cellpadding="0" cellspacing="0" summary="">
+<tr>
+<th>OWNER</th>
+<th>NAME</th>
+<th>TYPE</th>
+<th>REFERENCED_OWNER</th>
+<th>REFERENCED_NAME</th>
+<th>REFERENCED_TYPE</th>
+</tr>
+</table>
+</div>
+</div>
+<div id="Child.0.10.5">
+<div class="childreport"><table id="Table.18" cellpadding="0" cellspacing="0" summary="">
+<tr>
+<th>OWNER</th>
+<th>NAME</th>
+<th>TYPE</th>
+<th>REFERENCED_OWNER</th>
+<th>REFERENCED_NAME</th>
+<th>REFERENCED_TYPE</th>
+</tr>
+</table>
+</div>
+</div>
+<div id="Child.0.11.5">
+<div class="childreport"><table id="Table.19" cellpadding="0" cellspacing="0" summary="">
+<tr>
+<th>OWNER</th>
+<th>NAME</th>
+<th>TYPE</th>
+<th>REFERENCED_OWNER</th>
+<th>REFERENCED_NAME</th>
+<th>REFERENCED_TYPE</th>
+</tr>
+</table>
+</div>
+</div>
+<div id="Child.0.12.5">
+<div class="childreport"><table id="Table.20" cellpadding="0" cellspacing="0" summary="">
+<tr>
+<th>OWNER</th>
+<th>NAME</th>
+<th>TYPE</th>
+<th>REFERENCED_OWNER</th>
+<th>REFERENCED_NAME</th>
+<th>REFERENCED_TYPE</th>
+</tr>
+</table>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="Master.6">
 <div class="masterreport">
-<table id="Table.11" cellpadding="0" cellspacing="0" summary="">
+<table id="Table.21" cellpadding="0" cellspacing="0" summary="">
 <th>NAME</th>
 <th>VALUE</th>
 </tr>
 <tr>
 <td>CREATED</td>
-<td>21-JUL-24</td>
+<td>12-AUG-24</td>
 </tr>
 <tr>
 <td>LAST_DDL_TIME</td>
-<td>21-JUL-24</td>
+<td>24-AUG-24</td>
 </tr>
 <tr>
 <td>OWNER</td>
@@ -461,19 +690,19 @@
 </tr>
 <tr>
 <td>INITIAL_EXTENT</td>
-<td>null</td>
+<td>65536</td>
 </tr>
 <tr>
 <td>NEXT_EXTENT</td>
-<td>null</td>
+<td>1048576</td>
 </tr>
 <tr>
 <td>MIN_EXTENTS</td>
-<td>null</td>
+<td>1</td>
 </tr>
 <tr>
 <td>MAX_EXTENTS</td>
-<td>null</td>
+<td>2147483645</td>
 </tr>
 <tr>
 <td>PCT_INCREASE</td>
@@ -497,35 +726,35 @@
 </tr>
 <tr>
 <td>NUM_ROWS</td>
-<td>null</td>
+<td>48</td>
 </tr>
 <tr>
 <td>BLOCKS</td>
-<td>null</td>
+<td>5</td>
 </tr>
 <tr>
 <td>EMPTY_BLOCKS</td>
-<td>null</td>
+<td>0</td>
 </tr>
 <tr>
 <td>AVG_SPACE</td>
-<td>null</td>
+<td>0</td>
 </tr>
 <tr>
 <td>CHAIN_CNT</td>
-<td>null</td>
+<td>0</td>
 </tr>
 <tr>
 <td>AVG_ROW_LEN</td>
-<td>null</td>
+<td>59</td>
 </tr>
 <tr>
 <td>AVG_SPACE_FREELIST_BLOCKS</td>
-<td>null</td>
+<td>0</td>
 </tr>
 <tr>
 <td>NUM_FREELIST_BLOCKS</td>
-<td>null</td>
+<td>0</td>
 </tr>
 <tr>
 <td>DEGREE</td>
@@ -545,11 +774,11 @@
 </tr>
 <tr>
 <td>SAMPLE_SIZE</td>
-<td>null</td>
+<td>48</td>
 </tr>
 <tr>
 <td>LAST_ANALYZED</td>
-<td>null</td>
+<td>25-AUG-24</td>
 </tr>
 <tr>
 <td>PARTITIONED</td>
@@ -593,7 +822,7 @@
 </tr>
 <tr>
 <td>GLOBAL_STATS</td>
-<td>NO</td>
+<td>YES</td>
 </tr>
 <tr>
 <td>USER_STATS</td>
@@ -664,7 +893,7 @@
 </div>
 <div id="Master.7">
 <div class="masterreport">
-<table id="Table.12" cellpadding="0" cellspacing="0" summary="">
+<table id="Table.22" cellpadding="0" cellspacing="0" summary="">
 <tr>
 <th>PARTITION_NAME</th>
 <th>LAST_ANALYZED</th>
@@ -690,7 +919,7 @@
 </div>
 <div id="Master.8">
 <div class="masterreport">
-<table id="Table.13" cellpadding="0" cellspacing="0" summary="">
+<table id="Table.23" cellpadding="0" cellspacing="0" summary="">
 <tr>
 <th>INDEX_OWNER</th>
 <th>INDEX_NAME</th>
@@ -703,9 +932,9 @@
 <th>JOIN_INDEX</th>
 <th>COLUMNS</th>
 </tr>
-<tr onclick="table_onSelectMasterRow(this, 13, 0)" class="currentrow">
+<tr onclick="table_onSelectMasterRow(this, 23, 0)" class="currentrow">
 <td class="currentcell">PROYECTO</td>
-<td class="currentcell">SYS_C007669</td>
+<td class="currentcell">SYS_C007508</td>
 <td class="currentcell">UNIQUE</td>
 <td class="currentcell">VALID</td>
 <td class="currentcell">NORMAL</td>
@@ -728,7 +957,7 @@
 <br/>
 <div id="ChildReports.8">
 <div id="Child.0.0.8">
-<div class="currentchildreport"><table id="Table.14" cellpadding="0" cellspacing="0" summary="">
+<div class="currentchildreport"><table id="Table.24" cellpadding="0" cellspacing="0" summary="">
 <tr>
 <th>INDEX_OWNER</th>
 <th>INDEX_NAME</th>
@@ -742,9 +971,9 @@
 <th>COLLATED_COLUMN_ID</th>
 <th>COLUMN_EXPRESSION</th>
 </tr>
-<tr onclick="table_onSelectRow(this, 14)" class="currentrow">
+<tr onclick="table_onSelectRow(this, 24)" class="currentrow">
 <td class="currentcell">PROYECTO</td>
-<td class="currentcell">SYS_C007669</td>
+<td class="currentcell">SYS_C007508</td>
 <td class="currentcell">PROYECTO</td>
 <td class="currentcell">EMPLEADOS</td>
 <td class="currentcell">COD_EMPLEADO</td>
