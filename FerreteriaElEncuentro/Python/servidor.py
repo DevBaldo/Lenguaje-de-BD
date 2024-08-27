@@ -47,9 +47,34 @@ def login():
         hashed_password = cursor.fetchone()
         cursor.close()
         conn.close()
+
+        if hashed_password and bcrypt.checkpw(contrasena.encode('utf-8'), hashed_password[0].encode('utf-8')):
+            session['user']= email
+            return redirect(url_for('index'))
+        else:
+            flash("Credenciales inválidas.")
+            return render_template('login.html')
+
+@app.route('/index')
+def index():
+    if not esta_autenticado():
+        return redirect(url_for('login'))
+    return render_template('index.html', user=session['user'])
+
+@app.before_request
+def before_request():
+    g.user = None
+    if 'user' in session:
+        g.user =session['user']
+        exempt_endpoints = ['login', 'register','send_css', 'send_img']
+
+        if not esta_autenticado() and request.endpoint not in exempt_endpoints:
+            return redirect(url_for('login'))
         
-
-
+        @app.route('/dropsession')
+        def cerrar_sesion():
+            session.pop('user', None)
+            return redirect(url_for('login'))
 
 #####################Clientes#####################
 @app.route("/clientes", methods=['GET'])
